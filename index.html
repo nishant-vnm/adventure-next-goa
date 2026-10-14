@@ -19,6 +19,20 @@
 <label class="field full">Food Preference <i style="color:var(--red)">*</i><select name="food" required><option value="">Select preference</option><option>Vegetarian</option><option>Non-vegetarian</option><option>Vegan</option><option>Other / special requirements</option></select></label>
 <label class="field">Emergency Contact Name <i style="color:var(--red)">*</i><input name="emergencyName" required placeholder="Emergency contact name"></label>
 <label class="field">Emergency Contact Number <i style="color:var(--red)">*</i><input name="emergencyPhone" type="tel" required placeholder="Phone number"></label>
+<label class="field full">
+  Payment UTR / Transaction Reference Number
+  <input
+    type="text"
+    id="paymentUTR"
+    name="paymentUTR"
+    placeholder="Enter your payment UTR number"
+    autocomplete="off"
+    maxlength="50"
+  >
+  <span class="note">
+    Enter the UTR or transaction reference number from your payment confirmation.
+  </span>
+</label>
 <label class="field full">ID Proof for hotel (optional; confirm accepted ID first)<input name="idproof" type="file" accept=".pdf,.jpg,.jpeg,.png"><span class="note">PDF, JPG or PNG. This demo does not upload files. If Aadhaar is required, use a masked copy where accepted; never share an Aadhaar OTP.</span></label></div>
 <div class="jersey"><div><b style="font-size:12px">Extra Jersey Purchase <span style="color:#777;font-weight:400">(Optional)</span></b><label class="check"><input type="checkbox" id="jersey"> I want to purchase additional event jersey</label><div class="controls">
 <label class="field">Colour<select id="colour" disabled><option>Black</option><option>White</option><option>One of each</option></select></label><label class="field">Size<select id="size" disabled><option value="">Size</option><option>XS</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>3XL</option></select></label><label class="field">Quantity<select id="qty" disabled><option>1</option><option>2</option><option>3</option></select></label></div></div><div class="shirt"><span>ADVENTURE<br>NEXT<br>GOA 2026</span></div></div>
