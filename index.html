@@ -355,7 +355,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
       </div>
     </div>
 
-    <!-- Registration Form in its original spot -->
+    <!-- Registration Form -->
     <div class="form-card" id="register">
       <h2>Rider Registration</h2>
       <p class="sub">Join us for an unforgettable ride to Goa in 2026.</p>
@@ -453,10 +453,10 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
 
     <div class="panel tracker-highlight" style="margin-bottom:14px">
       <h3>Rider Location Sharing</h3>
-      <p>Enter your name, phone number, and pick your map pin colour. Your initials will appear on the live map. Location sharing is strictly voluntary and can be stopped anytime.</p>
+      <p>One active pin per phone number. Your session automatically resumes if you refresh the page.</p>
       <div class="track-controls">
         <input type="text" id="riderNameInput" placeholder="Your name (e.g. Rahul Sharma)" style="flex:1;min-width:180px">
-        <input type="tel" id="riderPhoneInput" placeholder="Phone number" inputmode="tel" style="width:190px">
+        <input type="tel" id="riderPhoneInput" placeholder="10-digit phone number" inputmode="tel" style="width:200px">
         <select id="riderColorInput" aria-label="Pin colour">
           <option value="#d7192d">Red Badge</option>
           <option value="#17191c">Black Badge</option>
@@ -701,33 +701,43 @@ function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
+// Normalize phone number to a unique key (last 10 digits) so only 1 marker exists per phone number
+function normalizePhoneKey(phone) {
+  const digits = String(phone || '').replace(/\D/g, '');
+  return digits.length >= 10 ? digits.slice(-10) : digits;
+}
+
 let markers = {};
 let watchId = null;
 let hasCenteredOnUser = false;
+let activePhoneKey = null;
 
+// Listen to all active riders keyed by unique phone number
 db.ref('riders').on('value', snapshot => {
   const riders = snapshot.val() || {};
   
-  Object.keys(riders).forEach(uid => {
-    const rider = riders[uid];
+  Object.keys(riders).forEach(phoneKey => {
+    const rider = riders[phoneKey];
+    if (!rider || typeof rider.lat !== 'number' || typeof rider.lng !== 'number') return;
+
     const latLng = [rider.lat, rider.lng];
     const icon = createInitialsIcon(rider.name, rider.color);
     const timeStr = rider.updatedAt ? new Date(rider.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '';
     const popupHtml = `<b>${escapeHtml(rider.name)}</b><br><a href="tel:${escapeHtml(rider.phone)}" style="color:#1d6ce0;font-weight:700">${escapeHtml(rider.phone)}</a><br><small>Updated: ${timeStr}</small>`;
 
-    if (markers[uid]) {
-      markers[uid].setLatLng(latLng);
-      markers[uid].setIcon(icon);
-      markers[uid].setPopupContent(popupHtml);
+    if (markers[phoneKey]) {
+      markers[phoneKey].setLatLng(latLng);
+      markers[phoneKey].setIcon(icon);
+      markers[phoneKey].setPopupContent(popupHtml);
     } else {
-      markers[uid] = L.marker(latLng, { icon: icon }).addTo(map).bindPopup(popupHtml);
+      markers[phoneKey] = L.marker(latLng, { icon: icon }).addTo(map).bindPopup(popupHtml);
     }
   });
 
-  Object.keys(markers).forEach(uid => {
-    if (!riders[uid]) {
-      map.removeLayer(markers[uid]);
-      delete markers[uid];
+  Object.keys(markers).forEach(phoneKey => {
+    if (!riders[phoneKey]) {
+      map.removeLayer(markers[phoneKey]);
+      delete markers[phoneKey];
     }
   });
 });
@@ -739,18 +749,11 @@ const riderNameInput = document.getElementById('riderNameInput');
 const riderPhoneInput = document.getElementById('riderPhoneInput');
 const riderColorInput = document.getElementById('riderColorInput');
 
-startShareBtn.addEventListener('click', async () => {
-  const riderName = riderNameInput.value.trim();
-  const riderPhone = riderPhoneInput.value.trim();
-  const riderColor = riderColorInput.value;
+const STORAGE_KEY = 'ang2026_active_tracker';
 
-  if (!riderName) {
-    alert('Please enter your name before sharing location.');
-    riderNameInput.focus();
-    return;
-  }
-
-  if (!riderPhone || riderPhone.length < 6) {
+async function beginTrackingSession(riderName, riderPhone, riderColor, isAutoResume = false) {
+  const phoneKey = normalizePhoneKey(riderPhone);
+  if (!phoneKey || phoneKey.length < 6) {
     alert('Please enter a valid phone number.');
     riderPhoneInput.focus();
     return;
@@ -761,7 +764,8 @@ startShareBtn.addEventListener('click', async () => {
     return;
   }
 
-  shareStatus.textContent = 'Authenticating and starting location broadcast...';
+  shareStatus.style.color = 'var(--muted)';
+  shareStatus.textContent = isAutoResume ? 'Resuming your previous tracking session...' : 'Authenticating and starting location broadcast...';
   hasCenteredOnUser = false;
 
   try {
@@ -771,6 +775,16 @@ startShareBtn.addEventListener('click', async () => {
       user = cred.user;
     }
 
+    activePhoneKey = phoneKey;
+
+    // Persist session locally so page refresh automatically resumes tracking
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      name: riderName,
+      phone: riderPhone,
+      color: riderColor,
+      active: true
+    }));
+
     startShareBtn.style.display = 'none';
     stopShareBtn.style.display = 'inline-flex';
     riderNameInput.disabled = true;
@@ -778,6 +792,14 @@ startShareBtn.addEventListener('click', async () => {
     riderColorInput.disabled = true;
     shareStatus.style.color = '#0d8a4e';
     shareStatus.textContent = `Sharing active as ${riderName} (${riderPhone}). Keep screen active while riding.`;
+
+    const riderRef = db.ref('riders/' + phoneKey);
+    // Automatically remove marker if browser tab is completely closed/disconnected
+    riderRef.onDisconnect().remove();
+
+    if (watchId !== null) {
+      navigator.geolocation.clearWatch(watchId);
+    }
 
     watchId = navigator.geolocation.watchPosition(
       position => {
@@ -789,7 +811,8 @@ startShareBtn.addEventListener('click', async () => {
           hasCenteredOnUser = true;
         }
 
-        db.ref('riders/' + user.uid).set({
+        riderRef.set({
+          uid: user.uid,
           name: riderName,
           phone: riderPhone,
           color: riderColor,
@@ -800,7 +823,7 @@ startShareBtn.addEventListener('click', async () => {
       },
       error => {
         shareStatus.style.color = 'var(--red)';
-        shareStatus.textContent = 'Error obtaining location: ' + error.message;
+        shareStatus.textContent = 'Location permission needed or GPS unavailable: ' + error.message;
       },
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 20000 }
     );
@@ -812,8 +835,23 @@ startShareBtn.addEventListener('click', async () => {
     riderNameInput.disabled = false;
     riderPhoneInput.disabled = false;
     riderColorInput.disabled = false;
+    shareStatus.style.color = 'var(--red)';
     shareStatus.textContent = 'Sharing failed.';
   }
+}
+
+startShareBtn.addEventListener('click', () => {
+  const riderName = riderNameInput.value.trim();
+  const riderPhone = riderPhoneInput.value.trim();
+  const riderColor = riderColorInput.value;
+
+  if (!riderName) {
+    alert('Please enter your name before sharing location.');
+    riderNameInput.focus();
+    return;
+  }
+
+  beginTrackingSession(riderName, riderPhone, riderColor, false);
 });
 
 stopShareBtn.addEventListener('click', () => {
@@ -822,10 +860,15 @@ stopShareBtn.addEventListener('click', () => {
     watchId = null;
   }
 
-  const user = auth.currentUser;
-  if (user) {
-    db.ref('riders/' + user.uid).remove();
+  // Clear saved session so it does not auto-resume on next refresh
+  localStorage.removeItem(STORAGE_KEY);
+
+  const keyToRemove = activePhoneKey || normalizePhoneKey(riderPhoneInput.value);
+  if (keyToRemove) {
+    db.ref('riders/' + keyToRemove).onDisconnect().cancel();
+    db.ref('riders/' + keyToRemove).remove();
   }
+  activePhoneKey = null;
 
   startShareBtn.style.display = 'inline-flex';
   stopShareBtn.style.display = 'none';
@@ -834,6 +877,21 @@ stopShareBtn.addEventListener('click', () => {
   riderColorInput.disabled = false;
   shareStatus.style.color = 'var(--muted)';
   shareStatus.textContent = 'Location sharing stopped.';
+});
+
+// Auto-restore tracking session on page load/refresh if rider hadn't clicked STOP SHARING
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    if (saved && saved.active && saved.name && saved.phone) {
+      riderNameInput.value = saved.name;
+      riderPhoneInput.value = saved.phone;
+      if (saved.color) riderColorInput.value = saved.color;
+      beginTrackingSession(saved.name, saved.phone, saved.color || '#d7192d', true);
+    }
+  } catch (e) {
+    localStorage.removeItem(STORAGE_KEY);
+  }
 });
 </script>
 </body>
