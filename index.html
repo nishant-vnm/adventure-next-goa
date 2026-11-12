@@ -679,8 +679,24 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
   
   submitBtn.disabled = true;
   submitBtn.textContent = 'SAVING REGISTRATION...';
-  msg.textContent = 'Submitting your details to the registry...';
+  msg.textContent = 'Submitting your details and uploading ID proof...';
   msg.style.color = 'var(--muted)';
+
+  let idProofData = null;
+  let idProofName = null;
+  let idProofMimeType = null;
+
+  const fileInput = form.querySelector('input[name="idproof"]');
+  if (fileInput && fileInput.files && fileInput.files[0]) {
+    const file = fileInput.files[0];
+    idProofName = file.name;
+    idProofMimeType = file.type;
+    idProofData = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  }
 
   const formData = {
     name: form.name.value,
@@ -696,7 +712,9 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
     jerseyColour: form.jerseyColour.value,
     jerseySize: form.jerseySize.value,
     jerseyQty: form.jerseyQty.value,
-    website_url: ''
+    idProofData: idProofData,
+    idProofName: idProofName,
+    idProofMimeType: idProofMimeType
   };
 
   try {
@@ -726,7 +744,7 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
     submitBtn.textContent = 'SUBMIT REGISTRATION →';
   }
 });
-
+  
 // Leaflet Map Setup
 const map = L.map('map').setView([15.2993, 74.1240], 8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
