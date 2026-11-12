@@ -167,7 +167,6 @@ header{
   font-size:15px;
   font-weight:400;
 }
-.field input[type=file]{font-size:12px;padding-top:8px}
 .note{font-size:10px;color:#777;line-height:1.45;font-weight:400}
 .jersey{display:grid;grid-template-columns:1fr 80px;gap:10px;align-items:end;margin-top:14px}
 .check{display:flex;align-items:center;gap:7px;color:#666;font-size:12px;margin:8px 0}
@@ -415,12 +414,6 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
           </label>
           <label class="field">Emergency Contact Name <i style="color:var(--red)">*</i><input name="emergencyName" required placeholder="Emergency contact name"></label>
           <label class="field">Emergency Contact Number <i style="color:var(--red)">*</i><input name="emergencyPhone" type="tel" required placeholder="Phone number"></label>
-          <label class="field full">
-            Payment UTR / Transaction Reference Number
-            <input type="text" id="paymentUTR" name="paymentUTR" placeholder="Enter your payment UTR number" autocomplete="off" maxlength="50">
-            <span class="note">Enter the UTR or transaction reference number from your payment confirmation.</span>
-          </label>
-          <label class="field full">ID Proof for hotel (optional)<input name="idproof" type="file" accept=".pdf,.jpg,.jpeg,.png"><span class="note">PDF, JPG or PNG. Note: ID files are stored locally for confirmation only.</span></label>
         </div>
         <div class="jersey">
           <div>
@@ -679,24 +672,8 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
   
   submitBtn.disabled = true;
   submitBtn.textContent = 'SAVING REGISTRATION...';
-  msg.textContent = 'Submitting your details and uploading ID proof...';
+  msg.textContent = 'Submitting your details to the registry...';
   msg.style.color = 'var(--muted)';
-
-  let idProofData = null;
-  let idProofName = null;
-  let idProofMimeType = null;
-
-  const fileInput = form.querySelector('input[name="idproof"]');
-  if (fileInput && fileInput.files && fileInput.files[0]) {
-    const file = fileInput.files[0];
-    idProofName = file.name;
-    idProofMimeType = file.type;
-    idProofData = await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.readAsDataURL(file);
-    });
-  }
 
   const formData = {
     name: form.name.value,
@@ -707,14 +684,10 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
     food: form.food.value,
     emergencyName: form.emergencyName.value,
     emergencyPhone: form.emergencyPhone.value,
-    paymentUTR: form.paymentUTR.value,
     extraJersey: jersey.checked,
     jerseyColour: form.jerseyColour.value,
     jerseySize: form.jerseySize.value,
     jerseyQty: form.jerseyQty.value,
-    idProofData: idProofData,
-    idProofName: idProofName,
-    idProofMimeType: idProofMimeType,
     website_url: ''
   };
 
