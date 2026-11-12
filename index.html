@@ -204,11 +204,8 @@ section{padding:60px 0;scroll-margin-top:78px}
 .head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:22px}
 .head h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.04em;margin:6px 0}
 .head p{max-width:520px;color:#666;font-size:13px;line-height:1.7;margin:0}
-.stats,.timeline,.groups,.roles,.checkgrid{display:grid;gap:12px}
-.stats{grid-template-columns:repeat(4,1fr)}
-.stat,.panel,.group{border:1px solid var(--line);border-radius:12px;padding:18px;background:white}
-.stat strong{display:block;font-size:30px}
-.stat span{font-size:11px;color:#666}
+.timeline,.groups,.roles,.checkgrid{display:grid;gap:12px}
+.panel,.group{border:1px solid var(--line);border-radius:12px;padding:18px;background:white}
 .timeline{grid-template-columns:repeat(4,1fr)}
 .day{border-top:3px solid var(--red);background:var(--wash);padding:17px;border-radius:0 0 10px 10px}
 .day b{font-size:10px;color:var(--red);letter-spacing:.12em}
@@ -292,7 +289,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
 @media(max-width:900px){
   .hero-inner{grid-template-columns:1fr}
   .bike{width:100%;left:-25%;opacity:.22}
-  .timeline,.stats{grid-template-columns:1fr 1fr}
+  .timeline{grid-template-columns:1fr 1fr}
   .roles{grid-template-columns:repeat(2,1fr)}
   .head{display:block}
   .head p{margin-top:8px}
@@ -358,7 +355,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
       </div>
     </div>
 
-    <!-- Restored Registration Form in its original spot -->
+    <!-- Registration Form in its original spot -->
     <div class="form-card" id="register">
       <h2>Rider Registration</h2>
       <p class="sub">Join us for an unforgettable ride to Goa in 2026.</p>
@@ -477,22 +474,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
   </div>
 </section>
 
-<section id="overview">
-  <div class="wrap">
-    <div class="head">
-      <div><div class="eyebrow">At a glance</div><h2>The ride, in brief</h2></div>
-      <p>Key ride schedule and resort check-in details for Adventure Next Goa 2026.</p>
-    </div>
-    <div class="stats">
-      <div class="stat"><strong>13–16</strong><span>November 2026 · four-day event</span></div>
-      <div class="stat"><strong>3</strong><span>Ride groups (Bangalore &amp; Pune)</span></div>
-      <div class="stat"><strong>2</strong><span>Common resort nights · 14 &amp; 15 Nov</span></div>
-      <div class="stat"><strong>South Goa</strong><span>Regenta Baywatch Resort</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="wash" id="itinerary">
+<section id="itinerary">
   <div class="wrap">
     <div class="head">
       <div><h2>Day-by-day itinerary</h2></div>
@@ -507,7 +489,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
   </div>
 </section>
 
-<section id="routes">
+<section class="wash" id="routes">
   <div class="wrap">
     <div class="head">
       <div><div class="eyebrow">Plan your stops</div><h2>Ride routes</h2></div>
@@ -541,7 +523,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
   </div>
 </section>
 
-<section class="wash" id="groups">
+<section id="groups">
   <div class="wrap">
     <div class="head">
       <div><div class="eyebrow">Ride leadership</div><h2>Groups &amp; coordination</h2></div>
@@ -571,7 +553,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
   </div>
 </section>
 
-<section id="handbook">
+<section class="wash" id="handbook">
   <div class="wrap">
     <div class="head">
       <div><div class="eyebrow">Before you leave</div><h2>Pre-ride checklist</h2></div>
