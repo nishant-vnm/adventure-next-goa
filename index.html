@@ -7,7 +7,7 @@
 #map{width:100%;height:450px;border-radius:12px;border:1px solid var(--line);margin-top:14px;z-index:1}
 .track-controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
 .track-controls input,.track-controls select{padding:10px 12px;border:1px solid #d7dade;border-radius:6px;font:inherit;font-size:13px;min-height:40px}
-.rider-badge{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;color:#fff;font-weight:900;font-size:12px;border:2.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.4);letter-spacing:.02em}
+.rider-badge{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;color:#fff;font-weight:900;font-size:13px;border:2.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.4);letter-spacing:.02em}
 @media(max-width:900px){.hero-inner{grid-template-columns:1fr}.bike{width:100%;left:-25%;opacity:.22}.timeline{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.roles{grid-template-columns:repeat(2,1fr)}.head{display:block}.head p{margin-top:8px}}@media(max-width:600px){.nav{height:auto;padding:13px 0;flex-wrap:wrap}.links{order:3;width:100%;overflow:auto;padding:5px 0;gap:16px}.links a{white-space:nowrap}.hero-inner{padding:30px 0}.fields,.routes,.checkgrid{grid-template-columns:1fr}.full{grid-column:auto}.timeline,.groups{grid-template-columns:1fr}.checklist{grid-template-columns:1fr}.form-card{padding:17px}.hero h1{font-size:58px}}
 </style></head><body>
 <header><div class="wrap nav"><a class="logo" href="#home">◢ ADVENTURE NEXT <span style="color:#555;font-weight:600">/ GOA 2026</span></a><nav class="links"><a href="#home">Home</a><a href="#register">Register</a><a href="#itinerary">Itinerary</a><a href="#routes">Routes</a><a href="#tracking">Live Map</a></nav><a class="btn" href="#register">REGISTER NOW ↗</a></div></header>
@@ -53,13 +53,13 @@
 <section id="handbook"><div class="wrap"><div class="head"><div><div class="eyebrow">Before you leave</div><h2>Pre-ride checklist</h2></div><p>Combined from the two supplied documents. Tick each item off before the departure briefing.</p></div><div class="checkgrid">
 <div class="panel"><h3>Motorcycle checks</h3><ul class="checklist"><li>Engine oil and service</li><li>Chain condition and lubrication</li><li>Brake pads and fluid</li><li>Tyres and pressure</li><li>Battery condition</li><li>Lights and horn</li><li>Coolant</li><li>Clutch and throttle</li><li>Puncture kit and inflator</li><li>Phone mount and charger</li><li>Luggage straps</li><li>First-aid kit</li></ul></div>
 <div class="panel"><h3>Rider &amp; luggage</h3><ul class="checklist"><li>Helmet and gloves</li><li>Riding jacket and pants</li><li>Riding boots</li><li>Rain layer / rain gear</li><li>Driving licence</li><li>RC, insurance and PUC</li><li>Hydration</li><li>Power bank</li><li>Medicines and toiletries</li><li>Clothes for 3–5 days</li><li>Camera / intercom (optional)</li><li>Secure luggage</li></ul></div></div></div></section>
-<section class="wash" id="tracking"><div class="wrap"><div class="head"><div><div class="eyebrow">Live Ride Tracker</div><h2>Live Rider Tracking</h2></div><p>Pick your 3-digit rider number and pin colour to broadcast your location on the map.</p></div>
+<section class="wash" id="tracking"><div class="wrap"><div class="head"><div><div class="eyebrow">Live Ride Tracker</div><h2>Live Rider Tracking</h2></div><p>Enter your phone number and pin colour to broadcast your location on the map.</p></div>
 <div class="panel" style="margin-bottom:14px">
   <h3>Rider Location Sharing</h3>
-  <p>Enter your name, choose a 3-digit tracking number, and pick your map pin colour. Location sharing is strictly voluntary and can be stopped anytime.</p>
+  <p>Enter your name, phone number, and pick your map pin colour. Location sharing is strictly voluntary and can be stopped anytime.</p>
   <div class="track-controls">
-    <input type="text" id="riderNameInput" placeholder="Your name" style="flex:1;min-width:160px">
-    <input type="text" id="riderNumberInput" placeholder="3-digit # (e.g. 007)" maxlength="3" inputmode="numeric" style="width:155px">
+    <input type="text" id="riderNameInput" placeholder="Your name (e.g. Rahul Sharma)" style="flex:1;min-width:180px">
+    <input type="tel" id="riderPhoneInput" placeholder="Phone number (e.g. 9876543210)" style="width:200px">
     <select id="riderColorInput" aria-label="Pin colour">
       <option value="#d7192d">Red Pin</option>
       <option value="#17191c">Black Pin</option>
@@ -75,7 +75,7 @@
 </div>
 <div class="panel">
   <h3>Live Map (OpenStreetMap)</h3>
-  <p>Active riders appear below as colour-coded numbered badges. Tap any badge to see the rider's name and last update time.</p>
+  <p>Active riders appear below as colour-coded badges showing their initials. Tap any badge to see the rider's name, phone number, and update time.</p>
   <div id="map"></div>
 </div>
 </div></section>
@@ -174,15 +174,22 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-function createNumberedIcon(num, color) {
-  const safeNum = String(num || '---').replace(/[^0-9A-Za-z]/g, '').slice(0, 3);
+function getInitials(name) {
+  const parts = String(name || '').trim().split(/\s+/);
+  if (parts.length === 0 || !parts[0]) return 'RD';
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function createInitialsIcon(name, color) {
+  const initials = getInitials(name);
   const safeColor = /^#[0-9a-fA-F]{6}$/.test(color) ? color : '#d7192d';
   return L.divIcon({
     className: '',
-    html: `<div class="rider-badge" style="background:${safeColor}">${safeNum}</div>`,
-    iconSize: [36, 36],
-    iconAnchor: [18, 18],
-    popupAnchor: [0, -18]
+    html: `<div class="rider-badge" style="background:${safeColor}">${initials}</div>`,
+    iconSize: [38, 38],
+    iconAnchor: [19, 19],
+    popupAnchor: [0, -19]
   });
 }
 
@@ -192,7 +199,7 @@ function escapeHtml(str) {
 
 let markers = {};
 let watchId = null;
-let hasCenteredOnUser = false; // Ensures map only auto-centers once when location is first acquired
+let hasCenteredOnUser = false;
 
 db.ref('riders').on('value', snapshot => {
   const riders = snapshot.val() || {};
@@ -200,9 +207,9 @@ db.ref('riders').on('value', snapshot => {
   Object.keys(riders).forEach(uid => {
     const rider = riders[uid];
     const latLng = [rider.lat, rider.lng];
-    const icon = createNumberedIcon(rider.number, rider.color);
+    const icon = createInitialsIcon(rider.name, rider.color);
     const timeStr = rider.updatedAt ? new Date(rider.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '';
-    const popupHtml = `<b>#${escapeHtml(rider.number)} · ${escapeHtml(rider.name)}</b><br><small>Updated: ${timeStr}</small>`;
+    const popupHtml = `<b>${escapeHtml(rider.name)} (${escapeHtml(rider.phone)})</b><br><small>Updated: ${timeStr}</small>`;
 
     if (markers[uid]) {
       markers[uid].setLatLng(latLng);
@@ -225,12 +232,12 @@ const startShareBtn = document.getElementById('startShareBtn');
 const stopShareBtn = document.getElementById('stopShareBtn');
 const shareStatus = document.getElementById('shareStatus');
 const riderNameInput = document.getElementById('riderNameInput');
-const riderNumberInput = document.getElementById('riderNumberInput');
+const riderPhoneInput = document.getElementById('riderPhoneInput');
 const riderColorInput = document.getElementById('riderColorInput');
 
 startShareBtn.addEventListener('click', async () => {
   const riderName = riderNameInput.value.trim();
-  const riderNumber = riderNumberInput.value.trim();
+  const riderPhone = riderPhoneInput.value.trim();
   const riderColor = riderColorInput.value;
 
   if (!riderName) {
@@ -239,9 +246,9 @@ startShareBtn.addEventListener('click', async () => {
     return;
   }
 
-  if (!/^[0-9]{3}$/.test(riderNumber)) {
-    alert('Please enter a 3-digit tracking number (for example: 007 or 124).');
-    riderNumberInput.focus();
+  if (!riderPhone || riderPhone.length < 6) {
+    alert('Please enter a valid phone number.');
+    riderPhoneInput.focus();
     return;
   }
 
@@ -251,7 +258,7 @@ startShareBtn.addEventListener('click', async () => {
   }
 
   shareStatus.textContent = 'Authenticating and starting location broadcast...';
-  hasCenteredOnUser = false; // Reset so map centers to rider's initial fix
+  hasCenteredOnUser = false;
 
   try {
     let user = auth.currentUser;
@@ -263,25 +270,24 @@ startShareBtn.addEventListener('click', async () => {
     startShareBtn.style.display = 'none';
     stopShareBtn.style.display = 'inline-block';
     riderNameInput.disabled = true;
-    riderNumberInput.disabled = true;
+    riderPhoneInput.disabled = true;
     riderColorInput.disabled = true;
     shareStatus.style.color = '#0d8a4e';
-    shareStatus.textContent = `Sharing active as #${riderNumber} (${riderName}). Keep browser open while riding.`;
+    shareStatus.textContent = `Sharing active as ${riderName} (${riderPhone}). Keep browser open while riding.`;
 
     watchId = navigator.geolocation.watchPosition(
       position => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
-        // Auto-center map on the rider's location the moment it is first received
         if (!hasCenteredOnUser) {
-          map.setView([lat, lng], 14); // Zoom in closer on the rider
+          map.setView([lat, lng], 14);
           hasCenteredOnUser = true;
         }
 
         db.ref('riders/' + user.uid).set({
           name: riderName,
-          number: riderNumber,
+          phone: riderPhone,
           color: riderColor,
           lat: lat,
           lng: lng,
@@ -300,7 +306,7 @@ startShareBtn.addEventListener('click', async () => {
     startShareBtn.style.display = 'inline-block';
     stopShareBtn.style.display = 'none';
     riderNameInput.disabled = false;
-    riderNumberInput.disabled = false;
+    riderPhoneInput.disabled = false;
     riderColorInput.disabled = false;
     shareStatus.textContent = 'Sharing failed.';
   }
@@ -320,7 +326,7 @@ stopShareBtn.addEventListener('click', () => {
   startShareBtn.style.display = 'inline-block';
   stopShareBtn.style.display = 'none';
   riderNameInput.disabled = false;
-  riderNumberInput.disabled = false;
+  riderPhoneInput.disabled = false;
   riderColorInput.disabled = false;
   shareStatus.style.color = 'var(--muted)';
   shareStatus.textContent = 'Location sharing stopped.';
