@@ -229,7 +229,7 @@ section{padding:60px 0;scroll-margin-top:78px}
 .checklist li{font-size:13px;color:#444}
 .checklist li:before{content:"✓";color:var(--red);font-weight:900;margin-right:8px}
 
-/* Highlighted Live Tracking Section */
+/* Highlighted Live Tracking Section & Tabs */
 .tracker-highlight{
   border:2px solid var(--red);
   box-shadow:0 16px 40px rgba(215,25,45,0.09);
@@ -245,19 +245,44 @@ section{padding:60px 0;scroll-margin-top:78px}
   letter-spacing:.08em;
   text-transform:uppercase;
 }
+.tab-headers{
+  display:flex;
+  gap:8px;
+  border-bottom:2px solid var(--line);
+  margin-bottom:16px;
+}
+.tab-btn{
+  background:transparent;
+  border:0;
+  padding:10px 16px;
+  font-size:13px;
+  font-weight:800;
+  color:var(--muted);
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  margin-bottom:-2px;
+  transition:all .2s;
+}
+.tab-btn.active{
+  color:var(--red);
+  border-bottom-color:var(--red);
+}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
 #map{
   width:100%;
   height:420px;
   border-radius:12px;
   border:1px solid var(--line);
-  margin-top:14px;
+  margin-top:16px;
   z-index:1;
 }
 .track-controls{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
-  margin-top:12px;
+  margin-top:10px;
   align-items:center;
 }
 .track-controls input,.track-controls select{
@@ -267,20 +292,6 @@ section{padding:60px 0;scroll-margin-top:78px}
   font:inherit;
   font-size:15px;
   min-height:46px;
-}
-.family-lookup{
-  background:var(--wash);
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:14px;
-  margin-top:16px;
-}
-.family-lookup h4{
-  margin:0 0 6px;
-  font-size:14px;
-  display:flex;
-  align-items:center;
-  gap:6px;
 }
 .rider-badge{
   display:flex;
@@ -454,7 +465,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
   </div>
 </section>
 
-<!-- Highlighted Live Rider Tracking Section -->
+<!-- Highlighted Live Rider Tracking Section with Adjacent Tabs -->
 <section class="wash" id="tracking">
   <div class="wrap">
     <div class="head">
@@ -462,40 +473,48 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
         <div class="eyebrow">Live Ride Tracker</div>
         <h2>Live Rider Tracking <span class="live-badge" style="vertical-align:middle;margin-left:6px">● Real-Time</span></h2>
       </div>
-      <p>Riders can broadcast their live GPS location, and family members can search by phone number to follow a specific rider.</p>
+      <p>Broadcast your live GPS location as a rider, or track a participant by phone number as family/friends.</p>
     </div>
 
     <div class="panel tracker-highlight" style="margin-bottom:14px">
-      <h3>1. Rider Location Sharing</h3>
-      <p>One active pin per phone number. Your session automatically resumes if you refresh the page.</p>
-      <div class="track-controls">
-        <input type="text" id="riderNameInput" placeholder="Your name (e.g. Rahul Sharma)" style="flex:1;min-width:180px">
-        <input type="tel" id="riderPhoneInput" placeholder="10-digit phone number" inputmode="tel" style="width:200px">
-        <select id="riderColorInput" aria-label="Pin colour">
-          <option value="#d7192d">Red Badge</option>
-          <option value="#17191c">Black Badge</option>
-          <option value="#1d6ce0">Blue Badge</option>
-          <option value="#0d8a4e">Green Badge</option>
-          <option value="#e67e22">Orange Badge</option>
-          <option value="#7c3aed">Purple Badge</option>
-        </select>
-        <button class="btn" id="startShareBtn" type="button">START SHARING LOCATION</button>
-        <button class="btn" id="stopShareBtn" type="button" style="background:#444;display:none">STOP SHARING</button>
+      <!-- Adjacent Tab Headers -->
+      <div class="tab-headers">
+        <button class="tab-btn active" type="button" onclick="switchTab('shareTab', this)">1. Rider Location Sharing</button>
+        <button class="tab-btn" type="button" onclick="switchTab('trackTab', this)">Track Rider</button>
       </div>
-      <p id="shareStatus" style="font-size:12px;margin-top:10px;font-weight:700;color:var(--muted)">Sharing is currently inactive.</p>
 
-      <!-- Family Member / Spectator Lookup Box -->
-      <div class="family-lookup">
-        <h4>2. Family &amp; Friends: Track a Rider by Phone Number</h4>
-        <p style="margin:0 0 8px;font-size:12px;color:#666">Enter a rider's mobile number to locate and follow them on the map.</p>
+      <!-- Tab 1: Rider Location Sharing -->
+      <div id="shareTab" class="tab-content active">
+        <p style="margin:0 0 10px;font-size:13px;color:#555">One active pin per phone number. Your session automatically resumes if you refresh the page.</p>
+        <div class="track-controls">
+          <input type="text" id="riderNameInput" placeholder="Your name (e.g. Rahul Sharma)" style="flex:1;min-width:180px">
+          <input type="tel" id="riderPhoneInput" placeholder="10-digit phone number" inputmode="tel" style="width:200px">
+          <select id="riderColorInput" aria-label="Pin colour">
+            <option value="#d7192d">Red Badge</option>
+            <option value="#17191c">Black Badge</option>
+            <option value="#1d6ce0">Blue Badge</option>
+            <option value="#0d8a4e">Green Badge</option>
+            <option value="#e67e22">Orange Badge</option>
+            <option value="#7c3aed">Purple Badge</option>
+          </select>
+          <button class="btn" id="startShareBtn" type="button">START SHARING LOCATION</button>
+          <button class="btn" id="stopShareBtn" type="button" style="background:#444;display:none">STOP SHARING</button>
+        </div>
+        <p id="shareStatus" style="font-size:12px;margin-top:10px;font-weight:700;color:var(--muted)">Sharing is currently inactive.</p>
+      </div>
+
+      <!-- Tab 2: Track Rider -->
+      <div id="trackTab" class="tab-content">
+        <p style="margin:0 0 10px;font-size:13px;color:#555">Enter a rider's 10-digit mobile number to locate and follow them on the map.</p>
         <div class="track-controls" style="margin-top:0">
           <input type="tel" id="lookupPhoneInput" placeholder="Enter rider's phone number" inputmode="tel" style="flex:1;min-width:200px">
           <button class="btn" id="lookupBtn" type="button" style="background:#191b1e">FIND &amp; FOLLOW RIDER</button>
           <button class="btn" id="clearLookupBtn" type="button" style="background:white;color:var(--ink);border:1px solid #cfd3d8;display:none">SHOW ALL RIDERS</button>
         </div>
-        <p id="lookupStatus" style="font-size:12px;margin:8px 0 0;font-weight:700;color:var(--muted)"></p>
+        <p id="lookupStatus" style="font-size:12px;margin-top:10px;font-weight:700;color:var(--muted)"></p>
       </div>
 
+      <!-- Shared Live Map -->
       <div id="map"></div>
     </div>
   </div>
@@ -633,6 +652,15 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
+// Tab switching helper function
+function switchTab(tabId, btnElement) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  btnElement.classList.add('active');
+  setTimeout(() => { map.invalidateSize(); }, 200); // Fixes leaflet map rendering when tab opens
+}
+
 // Jersey toggle & Registration Form
 const jersey = document.getElementById('jersey');
 ['colour', 'size', 'qty'].forEach(id => document.getElementById(id).disabled = true);
@@ -738,7 +766,7 @@ let latestRidersData = {};
 let watchId = null;
 let hasCenteredOnUser = false;
 let activePhoneKey = null;
-let followedPhoneKey = null; // Used by family members tracking a specific rider
+let followedPhoneKey = null;
 
 const lookupPhoneInput = document.getElementById('lookupPhoneInput');
 const lookupBtn = document.getElementById('lookupBtn');
@@ -786,7 +814,6 @@ clearLookupBtn.addEventListener('click', () => {
   }
 });
 
-// Listen to all active riders keyed by unique phone number
 db.ref('riders').on('value', snapshot => {
   const riders = snapshot.val() || {};
   latestRidersData = riders;
@@ -816,7 +843,6 @@ db.ref('riders').on('value', snapshot => {
     }
   });
 
-  // If a family member is actively following a rider, keep the map updated on them
   if (followedPhoneKey) {
     focusOnFollowedRider(followedPhoneKey, false);
   }
@@ -957,12 +983,17 @@ stopShareBtn.addEventListener('click', () => {
 });
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Support direct shareable family link via ?track=9876543210
   const params = new URLSearchParams(window.location.search);
   const trackParam = params.get('track');
   if (trackParam) {
     const key = normalizePhoneKey(trackParam);
     if (key) {
+      // Automatically switch to the "Track Rider" tab if opened via query parameter
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('trackTab').classList.add('active');
+      document.querySelectorAll('.tab-btn')[1].classList.add('active');
+
       lookupPhoneInput.value = trackParam;
       followedPhoneKey = key;
       clearLookupBtn.style.display = 'inline-flex';
