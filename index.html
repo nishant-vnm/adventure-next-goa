@@ -714,7 +714,8 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
     jerseyQty: form.jerseyQty.value,
     idProofData: idProofData,
     idProofName: idProofName,
-    idProofMimeType: idProofMimeType
+    idProofMimeType: idProofMimeType,
+    website_url: ''
   };
 
   try {
@@ -744,7 +745,7 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
     submitBtn.textContent = 'SUBMIT REGISTRATION →';
   }
 });
-  
+
 // Leaflet Map Setup
 const map = L.map('map').setView([15.2993, 74.1240], 8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
