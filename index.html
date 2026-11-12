@@ -1,85 +1,490 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Adventure Next | Goa 2026</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
+<title>Adventure Next | Goa 2026 — Live Ride Hub</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
-:root{--red:#d7192d;--ink:#17191c;--muted:#686d73;--line:#e3e5e8;--wash:#f7f7f6}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 36px));margin:auto}header{position:sticky;top:0;z-index:1000;background:#ffffffed;backdrop-filter:blur(12px);border-bottom:1px solid #eee}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}.logo{color:var(--red);font-weight:900;letter-spacing:.08em}.links{display:flex;gap:22px;font-size:13px}.links a:hover{color:var(--red)}.btn{background:var(--red);color:white;border:0;border-radius:7px;padding:12px 16px;font-size:12px;font-weight:800;cursor:pointer}.hero{position:relative;overflow:hidden;background:linear-gradient(105deg,#fbfbfa,#f2f2f0 52%,white)}.topo{position:absolute;inset:0;opacity:.42;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cg fill='none' stroke='%23d5d8da'%3E%3Cpath d='M-20 35C80 0 90 100 180 80S310 5 450 55M-20 70C80 35 105 130 195 110S330 45 450 95M-20 110C90 70 120 165 215 145S350 85 450 130M-20 155C100 110 140 200 240 180S370 130 450 170M-20 205C100 160 160 245 270 225S390 180 450 215M-20 260C110 215 180 300 300 275S410 235 450 265M-20 320C120 270 205 355 330 330S425 290 450 320M-20 380C130 330 230 410 365 385S440 355 450 380'/%3E%3C/g%3E%3C/svg%3E");background-size:500px}.bike{position:absolute;left:-3%;bottom:-1%;width:57%;height:78%;opacity:.47;pointer-events:none;z-index:0;overflow:hidden}.bike img{width:100%;height:100%;object-fit:contain;object-position:left bottom;filter:grayscale(1);mix-blend-mode:multiply}.hero-inner{position:relative;display:grid;grid-template-columns:.9fr 1.1fr;gap:30px;align-items:center;padding:42px 0;z-index:1}.kicker,.eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);font-weight:800}.hero h1{font-size:clamp(55px,7vw,88px);line-height:.95;letter-spacing:-.06em;margin:12px 0}.hero h1 span{color:var(--red)}.tagline{font-size:11px;letter-spacing:.26em;color:#666}.pills{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}.pill{border:1px solid #ddd;border-radius:99px;padding:8px 11px;font-size:11px;background:#ffffffa8;color:#555}.form-card{position:relative;z-index:2;background:#ffffffdf;backdrop-filter:blur(10px);border:1px solid white;box-shadow:0 15px 45px #16191c12;border-radius:16px;padding:23px}.form-card h2{margin:0;font-size:23px}.sub{font-size:13px;color:var(--muted);margin:5px 0 18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:700}.full{grid-column:1/-1}.field input,.field select{width:100%;min-height:37px;padding:9px 10px;border:1px solid #d7dade;border-radius:6px;background:#ffffffd9;font:inherit;font-weight:400}.field input[type=file]{font-size:11px}.note{font-size:10px;color:#777;line-height:1.45;font-weight:400}.jersey{display:grid;grid-template-columns:1fr 80px;gap:10px;align-items:end;margin-top:14px}.check{display:flex;align-items:center;gap:7px;color:#666;font-size:11px;margin:8px 0}.check input{accent-color:var(--red)}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.shirt{height:92px;border-radius:15px 15px 5px 5px;background:#191b1e;color:white;display:grid;place-items:center;text-align:center;font-size:8px;font-weight:900;position:relative;overflow:hidden}.shirt:after{content:"";position:absolute;width:100px;height:14px;background:var(--red);transform:rotate(-28deg)}.shirt span{z-index:1}.submit{width:100%;margin-top:13px}.privacy{font-size:10px;color:#777;line-height:1.5;margin-top:10px}.message{font-size:12px;font-weight:700;margin-top:10px;line-height:1.5}section{padding:65px 0;scroll-margin-top:78px}.head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:22px}.head h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.04em;margin:6px 0}.head p{max-width:520px;color:#666;font-size:13px;line-height:1.7;margin:0}.stats,.timeline,.groups,.roles,.checkgrid{display:grid;gap:12px}.stats{grid-template-columns:repeat(4,1fr)}.stat,.panel,.group{border:1px solid var(--line);border-radius:12px;padding:18px;background:white}.stat strong{display:block;font-size:30px}.stat span{font-size:11px;color:#666}.timeline{grid-template-columns:repeat(4,1fr)}.day{border-top:3px solid var(--red);background:var(--wash);padding:17px;border-radius:0 0 10px 10px}.day b{font-size:10px;color:var(--red);letter-spacing:.12em}.day h3{font-size:16px;margin:10px 0}.day p,.panel p,.group p{font-size:12px;line-height:1.7;color:#666}.routes{display:grid;grid-template-columns:1fr 1fr;gap:14px}.route{background:#191b1e;color:white;border-radius:12px;padding:20px}.route h3{margin:8px 0}.route .eyebrow{color:#ff8995}.route p{color:#ddd;font-size:12px;line-height:1.7}.stops{display:flex;flex-wrap:wrap;gap:6px}.stop{font-size:10px;border:1px solid #4b4e52;padding:6px 7px;border-radius:5px}.groups{grid-template-columns:repeat(3,1fr)}.group h3{margin:0}.group strong{font-size:11px;color:var(--red)}.roles{grid-template-columns:repeat(5,1fr);margin-top:13px}.role{background:var(--wash);padding:12px;border-radius:8px}.role small{display:block;color:#777;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}.role b{font-size:12px}.checkgrid{grid-template-columns:1fr 1fr}.checklist{padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px}.checklist li{font-size:12px;color:#555}.checklist li:before{content:"✓";color:var(--red);font-weight:900;margin-right:8px}.notice{background:#fff7f7;border:1px solid #f0d0d4;border-radius:10px;padding:14px;color:#62494d;font-size:12px;line-height:1.65;margin-top:14px}footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.wash{background:#fafafa}
-#map{width:100%;height:450px;border-radius:12px;border:1px solid var(--line);margin-top:14px;z-index:1}
-.track-controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
-.track-controls input,.track-controls select{padding:10px 12px;border:1px solid #d7dade;border-radius:6px;font:inherit;font-size:13px;min-height:40px}
-.rider-badge{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;color:#fff;font-weight:900;font-size:13px;border:2.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.4);letter-spacing:.02em}
-@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.bike{width:100%;left:-25%;opacity:.22}.timeline{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.roles{grid-template-columns:repeat(2,1fr)}.head{display:block}.head p{margin-top:8px}}@media(max-width:600px){.nav{height:auto;padding:13px 0;flex-wrap:wrap}.links{order:3;width:100%;overflow:auto;padding:5px 0;gap:16px}.links a{white-space:nowrap}.hero-inner{padding:30px 0}.fields,.routes,.checkgrid{grid-template-columns:1fr}.full{grid-column:auto}.timeline,.groups{grid-template-columns:1fr}.checklist{grid-template-columns:1fr}.form-card{padding:17px}.hero h1{font-size:58px}}
-</style></head><body>
-<header><div class="wrap nav"><a class="logo" href="#home">◢ ADVENTURE NEXT <span style="color:#555;font-weight:600">/ GOA 2026</span></a><nav class="links"><a href="#home">Home</a><a href="#register">Register</a><a href="#itinerary">Itinerary</a><a href="#routes">Routes</a><a href="#tracking">Live Map</a></nav><a class="btn" href="#register">REGISTER NOW ↗</a></div></header>
-<main>
-<section class="hero" id="home"><div class="topo"></div>
-<div class="bike" aria-hidden="true"><img src="cb500x-hero.jpg" alt=""></div>
-<div class="wrap hero-inner"><div><div class="kicker">Adventure Next</div><h1>GOA <span>2026</span></h1><div class="tagline">Rides | Roads | People | Stories</div><div class="pills"><span class="pill">13–16 November 2026</span><span class="pill">South Goa</span><span class="pill">Annual Group Ride</span></div><p style="max-width:430px;color:#666;font-size:13px;line-height:1.8">One ride, shared roads and a weekend in Goa. Register your details, review the route plan and get your bike ready for departure.</p><a class="btn" href="#itinerary">EXPLORE THE RIDE ↓</a></div>
-<div class="form-card" id="register"><h2>Rider Registration</h2><p class="sub">Join us for an unforgettable ride to Goa in 2026.</p><form id="registrationForm"><div class="fields">
-<label class="field full">Name <i style="color:var(--red)">*</i><input name="name" required placeholder="Your full name"></label>
-<label class="field full">Driving Licence Number <i style="color:var(--red)">*</i><input name="licence" required placeholder="Enter DL number"></label>
-<label class="field">Blood Group <i style="color:var(--red)">*</i><select id="bloodGroup" name="bloodGroup" required><option value="">Select blood group</option><option value="A+">A+</option><option value="A-">A−</option><option value="B+">B+</option><option value="B-">B−</option><option value="AB+">AB+</option><option value="AB-">AB−</option><option value="O+">O+</option><option value="O-">O−</option><option value="Unknown">Unknown / Not sure</option></select></label>
-<label class="field">Bike Make &amp; Model <i style="color:var(--red)">*</i><input name="bike" required placeholder="Bike Make &amp; Model"></label>
-<label class="field">Bike RC Number <i style="color:var(--red)">*</i><input name="rc" required placeholder="Enter RC number"></label>
-<label class="field full">Food Preference <i style="color:var(--red)">*</i><select name="food" required><option value="">Select preference</option><option>Vegetarian</option><option>Non-vegetarian</option><option>Vegan</option><option>Other / special requirements</option></select></label>
-<label class="field">Emergency Contact Name <i style="color:var(--red)">*</i><input name="emergencyName" required placeholder="Emergency contact name"></label>
-<label class="field">Emergency Contact Number <i style="color:var(--red)">*</i><input name="emergencyPhone" type="tel" required placeholder="Phone number"></label>
-<label class="field full">
-  Payment UTR / Transaction Reference Number
-  <input type="text" id="paymentUTR" name="paymentUTR" placeholder="Enter your payment UTR number" autocomplete="off" maxlength="50">
-  <span class="note">Enter the UTR or transaction reference number from your payment confirmation.</span>
-</label>
-<label class="field full">ID Proof for hotel (optional)<input name="idproof" type="file" accept=".pdf,.jpg,.jpeg,.png"><span class="note">PDF, JPG or PNG. Note: ID files are stored locally for confirmation only.</span></label></div>
-<div class="jersey"><div><b style="font-size:12px">Extra Jersey Purchase <span style="color:#777;font-weight:400">(Optional)</span></b><label class="check"><input type="checkbox" id="jersey" name="extraJersey"> I want to purchase additional event jersey</label><div class="controls">
-<label class="field">Colour<select id="colour" name="jerseyColour" disabled><option value="Black">Black</option><option value="White">White</option><option value="One of each">One of each</option></select></label><label class="field">Size<select id="size" name="jerseySize" disabled><option value="">Size</option><option value="XS">XS</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option><option value="3XL">3XL</option></select></label><label class="field">Quantity<select id="qty" name="jerseyQty" disabled><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></label></div></div><div class="shirt"><span>ADVENTURE<br>NEXT<br>GOA 2026</span></div></div>
-<button class="btn submit" type="submit">SUBMIT REGISTRATION →</button><div class="privacy">▣ Registrations are saved directly to the organiser secure spreadsheet with duplicate DL protection.</div><p class="message" id="msg" role="status"></p></form></div></div></section>
-<section id="overview"><div class="wrap"><div class="head"><div><div class="eyebrow">At a glance</div><h2>The ride, in brief</h2></div><p>Event information combined from the two supplied Goa ride handbooks.</p></div><div class="stats"><div class="stat"><strong>13–16</strong><span>November 2026 · four-day event</span></div><div class="stat"><strong>26</strong><span>Total riders stated in the complete handbook</span></div><div class="stat"><strong>3</strong><span>Ride groups described in the files</span></div><div class="stat"><strong>2</strong><span>Common resort nights · 14 &amp; 15 November</span></div></div><div class="notice"><b>Planning note:</b> The source states 26 total riders, but listed group counts A: 6, B: 7 and C: 3 add up to 16. Confirm the final headcount and group allocation before publishing a roster.</div></div></section>
-<section class="wash" id="itinerary"><div class="wrap"><div class="head"><div><h2>Day-by-day itinerary</h2></div><p>Reconfirm exact departure timings, road conditions and stops with each group lead before departure.</p></div><div class="timeline">
-<div class="day"><b>DAY 01 · 13 NOV</b><h3>Group A to Goa</h3><p>05:00 AM departure from Bangalore. NH48 via Hubballi–Dharwad and the Anmod approach, with fuel, breakfast and lunch breaks. Estimated arrival 4–6 PM, then hotel check-in and dinner.</p></div>
-<div class="day"><b>DAY 02 · 14 NOV</b><h3>Groups regroup</h3><p>Group B rides from Bangalore and Group C from Pune. Group A makes the transition ride. Regroup at Regenta Baywatch Resort, South Goa.</p></div>
-<div class="day"><b>DAY 03 · 15 NOV</b><h3>South Goa beach loop</h3><p>Suggested schedule: breakfast 8 AM, ride 9 AM, lunch, beach time and sunset dinner. Loop: Colva → Benaulim → Varca → Cavelossim → Mobor → resort.</p></div>
-<div class="day"><b>DAY 04 · 16 NOV</b><h3>Return journeys</h3><p>Groups A/B return via Anmod, Dharwad, Hubballi, Davanagere, Chitradurga and Tumakuru to Bangalore. Group C returns via Belagavi and Kolhapur to Pune.</p></div>
-</div></div></section>
-<section id="routes"><div class="wrap"><div class="head"><div><div class="eyebrow">Plan your stops</div><h2>Ride routes</h2></div><p>Route sequences below follow the supplied handbook. Verify navigation, fuel range, weather and road conditions before departure.</p></div><div class="routes">
-<div class="route"><div class="eyebrow">Bangalore · Groups A/B</div><h3>Bangalore → South Goa</h3><p>Route listed in the complete handbook:</p><div class="stops"><span class="stop">Bangalore</span><span class="stop">Tumakuru</span><span class="stop">Chitradurga</span><span class="stop">Davanagere</span><span class="stop">Hubballi</span><span class="stop">Dharwad</span><span class="stop">Yellapur</span><span class="stop">Anmod Ghat</span><span class="stop">Mollem</span><span class="stop">Margao</span><span class="stop">Regenta Baywatch Resort</span></div><p><b>Fuel stops:</b> Tumakuru, Davanagere, Hubballi, Mollem.</p></div>
-<div class="route"><div class="eyebrow">Pune · Group C</div><h3>Pune → South Goa</h3><p>Route listed in the complete handbook:</p><div class="stops"><span class="stop">Pune</span><span class="stop">Satara</span><span class="stop">Karad</span><span class="stop">Kolhapur</span><span class="stop">Nipani</span><span class="stop">Belagavi</span><span class="stop">Chorla Ghat</span><span class="stop">Sanquelim</span><span class="stop">Ponda</span><span class="stop">Margao</span><span class="stop">Regenta Baywatch Resort</span></div><p><b>Fuel stops:</b> Satara, Kolhapur, Belagavi, Ponda.</p></div></div>
-<div class="panel" style="margin-top:14px"><div class="eyebrow">Stay &amp; travel</div><h3>Regenta Baywatch Resort · South Goa</h3><p>The complete handbook lists common stay nights as 14 and 15 November, with all groups checking out on 16 November. Confirm rooming, booking, check-in instructions and accepted ID directly with the organiser/resort.</p></div></div></section>
-<section class="wash" id="groups"><div class="wrap"><div class="head"><div><div class="eyebrow">Ride leadership</div><h2>Groups &amp; coordination</h2></div><p>Roles and names below are taken from the supplied files. Personal phone numbers are omitted from this public-facing page.</p></div><div class="groups">
-<div class="group"><h3>Group A</h3><strong>6 riders listed</strong><p>Lead: <b>Vibhav</b><br>Roster includes riders from Bangalore and one from Chennai.</p></div>
-<div class="group"><h3>Group B</h3><strong>7 riders listed</strong><p>Lead: <b>Sriram Kamat</b><br>Origin: Bangalore.</p></div>
-<div class="group"><h3>Group C</h3><strong>3 riders listed</strong><p>Lead: <b>Kaustubh Thengodkar</b><br>Origin: Pune.</p></div></div>
-<div class="roles"><div class="role"><small>Group A lead</small><b>Vibhav</b></div><div class="role"><small>Group B lead</small><b>Sriram Kamat</b></div><div class="role"><small>Group C lead</small><b>Kaustubh Thengodkar</b></div><div class="role"><small>Finance</small><b>Prashanth Gorur</b></div><div class="role"><small>Communications</small><b>Vinay Bhoopalam</b></div></div>
-<div class="notice">The uploaded complete handbook includes rider names and mobile numbers. Keep those in a private, access-controlled roster rather than a public GitHub Pages site unless each rider has agreed to public disclosure.</div></div></section>
-<section id="handbook"><div class="wrap"><div class="head"><div><div class="eyebrow">Before you leave</div><h2>Pre-ride checklist</h2></div><p>Combined from the two supplied documents. Tick each item off before the departure briefing.</p></div><div class="checkgrid">
-<div class="panel"><h3>Motorcycle checks</h3><ul class="checklist"><li>Engine oil and service</li><li>Chain condition and lubrication</li><li>Brake pads and fluid</li><li>Tyres and pressure</li><li>Battery condition</li><li>Lights and horn</li><li>Coolant</li><li>Clutch and throttle</li><li>Puncture kit and inflator</li><li>Phone mount and charger</li><li>Luggage straps</li><li>First-aid kit</li></ul></div>
-<div class="panel"><h3>Rider &amp; luggage</h3><ul class="checklist"><li>Helmet and gloves</li><li>Riding jacket and pants</li><li>Riding boots</li><li>Rain layer / rain gear</li><li>Driving licence</li><li>RC, insurance and PUC</li><li>Hydration</li><li>Power bank</li><li>Medicines and toiletries</li><li>Clothes for 3–5 days</li><li>Camera / intercom (optional)</li><li>Secure luggage</li></ul></div></div></div></section>
-<section class="wash" id="tracking"><div class="wrap"><div class="head"><div><div class="eyebrow">Live Ride Tracker</div><h2>Live Rider Tracking</h2></div><p>Enter your phone number and pin colour to broadcast your location on the map.</p></div>
-<div class="panel" style="margin-bottom:14px">
-  <h3>Rider Location Sharing</h3>
-  <p>Enter your name, phone number, and pick your map pin colour. Location sharing is strictly voluntary and can be stopped anytime.</p>
-  <div class="track-controls">
-    <input type="text" id="riderNameInput" placeholder="Your name (e.g. Rahul Sharma)" style="flex:1;min-width:180px">
-    <input type="tel" id="riderPhoneInput" placeholder="Phone number (e.g. 9876543210)" style="width:200px">
-    <select id="riderColorInput" aria-label="Pin colour">
-      <option value="#d7192d">Red Pin</option>
-      <option value="#17191c">Black Pin</option>
-      <option value="#1d6ce0">Blue Pin</option>
-      <option value="#0d8a4e">Green Pin</option>
-      <option value="#e67e22">Orange Pin</option>
-      <option value="#7c3aed">Purple Pin</option>
-    </select>
-    <button class="btn" id="startShareBtn" type="button">START SHARING LOCATION</button>
-    <button class="btn" id="stopShareBtn" type="button" style="background:#555;display:none">STOP SHARING</button>
+:root{
+  --red:#d7192d;
+  --ink:#17191c;
+  --muted:#686d73;
+  --line:#e3e5e8;
+  --wash:#f7f7f6;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1160px,calc(100% - 32px));margin:auto}
+
+/* Sticky Mobile-Friendly Header */
+header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:#ffffffed;
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid #eee;
+}
+.nav{
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 0;
+}
+.logo{color:var(--red);font-weight:900;letter-spacing:.06em;font-size:15px}
+.links{display:flex;gap:20px;font-size:13px;font-weight:600}
+.links a:hover{color:var(--red)}
+.btn{
+  background:var(--red);
+  color:white;
+  border:0;
+  border-radius:8px;
+  padding:12px 16px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  min-height:44px;
+  transition:opacity .15s;
+}
+.btn:active{opacity:.85}
+.live-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#fff;
+  display:inline-block;
+  animation:pulse 1.5s infinite;
+}
+@keyframes pulse{
+  0%{opacity:1;transform:scale(1)}
+  50%{opacity:.4;transform:scale(1.25)}
+  100%{opacity:1;transform:scale(1)}
+}
+
+/* Hero & Featured Live Tracker */
+.hero{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(105deg,#fbfbfa,#f2f2f0 52%,white);
+}
+.topo{
+  position:absolute;
+  inset:0;
+  opacity:.42;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cg fill='none' stroke='%23d5d8da'%3E%3Cpath d='M-20 35C80 0 90 100 180 80S310 5 450 55M-20 70C80 35 105 130 195 110S330 45 450 95M-20 110C90 70 120 165 215 145S350 85 450 130M-20 155C100 110 140 200 240 180S370 130 450 170M-20 205C100 160 160 245 270 225S390 180 450 215M-20 260C110 215 180 300 300 275S410 235 450 265M-20 320C120 270 205 355 330 330S425 290 450 320M-20 380C130 330 230 410 365 385S440 355 450 380'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:500px;
+}
+.bike{
+  position:absolute;
+  left:-3%;
+  bottom:-1%;
+  width:57%;
+  height:78%;
+  opacity:.42;
+  pointer-events:none;
+  z-index:0;
+  overflow:hidden;
+}
+.bike img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:left bottom;
+  filter:grayscale(1);
+  mix-blend-mode:multiply;
+}
+.hero-inner{
+  position:relative;
+  display:grid;
+  grid-template-columns:.85fr 1.15fr;
+  gap:28px;
+  align-items:start;
+  padding:36px 0 48px;
+  z-index:1;
+}
+.kicker,.eyebrow{
+  font-size:11px;
+  letter-spacing:.28em;
+  text-transform:uppercase;
+  color:var(--red);
+  font-weight:800;
+}
+.hero h1{
+  font-size:clamp(48px,7vw,84px);
+  line-height:.95;
+  letter-spacing:-.05em;
+  margin:10px 0;
+}
+.hero h1 span{color:var(--red)}
+.tagline{font-size:11px;letter-spacing:.24em;color:#666}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+.pill{
+  border:1px solid #ddd;
+  border-radius:99px;
+  padding:7px 11px;
+  font-size:11px;
+  background:#ffffffb8;
+  color:#444;
+  font-weight:600;
+}
+
+/* Highlighted Live Tracking Card */
+.tracker-card{
+  position:relative;
+  z-index:2;
+  background:#fffffff2;
+  backdrop-filter:blur(10px);
+  border:2px solid var(--red);
+  box-shadow:0 18px 45px rgba(215,25,45,0.12);
+  border-radius:16px;
+  padding:20px;
+}
+.tracker-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:6px;
+}
+.tracker-card h2{margin:0;font-size:22px}
+.live-badge{
+  background:#ffeef0;
+  color:var(--red);
+  border:1px solid #f5c2c7;
+  font-size:10px;
+  font-weight:800;
+  padding:4px 9px;
+  border-radius:99px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.sub{font-size:13px;color:var(--muted);margin:4px 0 14px;line-height:1.5}
+.track-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr auto;
+  gap:10px;
+  margin-bottom:10px;
+}
+.track-grid input,.track-grid select{
+  width:100%;
+  min-height:46px;
+  padding:10px 12px;
+  border:1px solid #cfd3d8;
+  border-radius:8px;
+  background:#fff;
+  font:inherit;
+  font-size:15px; /* Prevents iOS auto-zoom on focus */
+}
+.track-actions{
+  display:flex;
+  gap:10px;
+}
+.track-actions .btn{
+  width:100%;
+  min-height:48px;
+  font-size:13px;
+}
+#map{
+  width:100%;
+  height:360px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  margin-top:14px;
+  z-index:1;
+}
+.rider-badge{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  color:#fff;
+  font-weight:900;
+  font-size:13px;
+  border:2.5px solid #fff;
+  box-shadow:0 3px 10px rgba(0,0,0,0.4);
+  letter-spacing:.02em;
+}
+
+/* Content Sections */
+section{padding:56px 0;scroll-margin-top:76px}
+.head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:20px}
+.head h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.04em;margin:6px 0}
+.head p{max-width:520px;color:#666;font-size:13px;line-height:1.7;margin:0}
+.stats,.timeline,.groups,.roles,.checkgrid{display:grid;gap:12px}
+.stats{grid-template-columns:repeat(4,1fr)}
+.stat,.panel,.group{border:1px solid var(--line);border-radius:12px;padding:18px;background:white}
+.stat strong{display:block;font-size:28px}
+.stat span{font-size:11px;color:#666}
+.timeline{grid-template-columns:repeat(4,1fr)}
+.day{border-top:3px solid var(--red);background:var(--wash);padding:17px;border-radius:0 0 10px 10px}
+.day b{font-size:10px;color:var(--red);letter-spacing:.12em}
+.day h3{font-size:16px;margin:10px 0}
+.day p,.panel p,.group p{font-size:13px;line-height:1.65;color:#555}
+.routes{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.route{background:#191b1e;color:white;border-radius:12px;padding:20px}
+.route h3{margin:8px 0}
+.route .eyebrow{color:#ff8995}
+.route p{color:#ddd;font-size:12px;line-height:1.7}
+.stops{display:flex;flex-wrap:wrap;gap:6px}
+.stop{font-size:11px;border:1px solid #4b4e52;padding:6px 8px;border-radius:5px}
+.groups{grid-template-columns:repeat(3,1fr)}
+.group h3{margin:0 0 6px}
+.roles{grid-template-columns:repeat(5,1fr);margin-top:13px}
+.role{background:var(--wash);padding:14px;border-radius:8px;border:1px solid #eceeed}
+.role small{display:block;color:#777;font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
+.role b{font-size:13px}
+.checkgrid{grid-template-columns:1fr 1fr}
+.checklist{padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.checklist li{font-size:13px;color:#444}
+.checklist li:before{content:"✓";color:var(--red);font-weight:900;margin-right:8px}
+footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
+.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.wash{background:#fafafa}
+
+/* Tablet & Mobile Responsive Rules */
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr}
+  .bike{width:100%;left:-20%;opacity:.16}
+  .timeline,.stats{grid-template-columns:1fr 1fr}
+  .roles{grid-template-columns:repeat(2,1fr)}
+  .head{display:block}
+  .head p{margin-top:8px}
+}
+@media(max-width:640px){
+  .nav{flex-wrap:wrap;padding:10px 0}
+  .links{
+    order:3;
+    width:100%;
+    overflow-x:auto;
+    padding:8px 0 4px;
+    gap:18px;
+    border-top:1px solid #f0f0f0;
+  }
+  .links a{white-space:nowrap;font-size:13px}
+  .hero-inner{padding:24px 0 36px;gap:20px}
+  .hero h1{font-size:52px}
+  .tracker-card{padding:16px}
+  .track-grid{grid-template-columns:1fr}
+  #map{height:320px}
+  .routes,.checkgrid,.timeline,.groups,.checklist{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .roles{grid-template-columns:1fr 1fr}
+  section{padding:44px 0}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#home">◢ ADVENTURE NEXT <span style="color:#555;font-weight:600">/ GOA 2026</span></a>
+    <nav class="links">
+      <a href="#tracking">Live Map</a>
+      <a href="#itinerary">Itinerary</a>
+      <a href="#routes">Routes</a>
+      <a href="#groups">Groups &amp; Leads</a>
+      <a href="#handbook">Checklist</a>
+    </nav>
+    <a class="btn" href="#tracking"><span class="live-dot"></span> LIVE TRACKING ↗</a>
   </div>
-  <p id="shareStatus" style="font-size:12px;margin-top:8px;font-weight:700;color:var(--muted)">Sharing is currently inactive.</p>
-</div>
-<div class="panel">
-  <h3>Live Map (OpenStreetMap)</h3>
-  <p>Active riders appear below as colour-coded badges showing their initials. Tap any badge to see the rider's name, phone number, and update time.</p>
-  <div id="map"></div>
-</div>
-</div></section>
-</main><footer><div class="wrap foot"><span><b>ADVENTURE NEXT · GOA 2026</b> — 13–16 November 2026</span><span>Based on the two supplied ride handbooks. Verify details with organisers before travel.</span></div></footer>
+</header>
+
+<main>
+<section class="hero" id="home">
+  <div class="topo"></div>
+  <div class="bike" aria-hidden="true"><img src="cb500x-hero.jpg" alt=""></div>
+  <div class="wrap hero-inner">
+    <div>
+      <div class="kicker">Adventure Next</div>
+      <h1>GOA <span>2026</span></h1>
+      <div class="tagline">Rides | Roads | People | Stories</div>
+      <div class="pills">
+        <span class="pill">13–16 November 2026</span>
+        <span class="pill">South Goa</span>
+        <span class="pill">Annual Group Ride</span>
+      </div>
+      <p style="max-width:430px;color:#555;font-size:14px;line-height:1.75">
+        One ride, shared roads and a weekend in Goa. Share your live location on the rider map, check your group lead, and review the route stops below.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+        <a class="btn" href="#groups" style="background:#191b1e">VIEW GROUPS &amp; LEADS ↓</a>
+        <a class="btn" href="#itinerary" style="background:white;color:var(--ink);border:1px solid #d5d8dc">ITINERARY ↓</a>
+      </div>
+    </div>
+
+    <!-- Highlighted Live Tracking Dashboard -->
+    <div class="tracker-card" id="tracking">
+      <div class="tracker-header">
+        <h2>Live Rider Tracking</h2>
+        <span class="live-badge">● Real-Time Map</span>
+      </div>
+      <p class="sub">Enter your name, phone number, and badge colour to broadcast your live GPS position to the ride group.</p>
+      
+      <div class="track-grid">
+        <input type="text" id="riderNameInput" placeholder="Your name (e.g. Rahul Sharma)" autocomplete="name">
+        <input type="tel" id="riderPhoneInput" placeholder="Phone number" autocomplete="tel" inputmode="tel">
+        <select id="riderColorInput" aria-label="Pin colour">
+          <option value="#d7192d">Red Badge</option>
+          <option value="#17191c">Black Badge</option>
+          <option value="#1d6ce0">Blue Badge</option>
+          <option value="#0d8a4e">Green Badge</option>
+          <option value="#e67e22">Orange Badge</option>
+          <option value="#7c3aed">Purple Badge</option>
+        </select>
+      </div>
+
+      <div class="track-actions">
+        <button class="btn" id="startShareBtn" type="button">START SHARING LOCATION</button>
+        <button class="btn" id="stopShareBtn" type="button" style="background:#444;display:none">STOP SHARING</button>
+      </div>
+
+      <p id="shareStatus" style="font-size:12px;margin:10px 0 0;font-weight:700;color:var(--muted)">Sharing is currently inactive. Map shows active riders below.</p>
+      <div id="map"></div>
+    </div>
+  </div>
+</section>
+
+<section id="overview">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="eyebrow">At a glance</div><h2>The ride, in brief</h2></div>
+      <p>Key ride schedule and resort check-in details for Adventure Next Goa 2026.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>13–16</strong><span>November 2026 · four-day event</span></div>
+      <div class="stat"><strong>3</strong><span>Ride groups (Bangalore &amp; Pune)</span></div>
+      <div class="stat"><strong>2</strong><span>Common resort nights · 14 &amp; 15 Nov</span></div>
+      <div class="stat"><strong>South Goa</strong><span>Regenta Baywatch Resort</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="wash" id="itinerary">
+  <div class="wrap">
+    <div class="head">
+      <div><h2>Day-by-day itinerary</h2></div>
+      <p>Reconfirm exact departure timings, road conditions and stops with each group lead before departure.</p>
+    </div>
+    <div class="timeline">
+      <div class="day"><b>DAY 01 · 13 NOV</b><h3>Group A to Goa</h3><p>05:00 AM departure from Bangalore. NH48 via Hubballi–Dharwad and the Anmod approach, with fuel, breakfast and lunch breaks. Estimated arrival 4–6 PM, then hotel check-in and dinner.</p></div>
+      <div class="day"><b>DAY 02 · 14 NOV</b><h3>Groups regroup</h3><p>Group B rides from Bangalore and Group C from Pune. Group A makes the transition ride. Regroup at Regenta Baywatch Resort, South Goa.</p></div>
+      <div class="day"><b>DAY 03 · 15 NOV</b><h3>South Goa beach loop</h3><p>Suggested schedule: breakfast 8 AM, ride 9 AM, lunch, beach time and sunset dinner. Loop: Colva → Benaulim → Varca → Cavelossim → Mobor → resort.</p></div>
+      <div class="day"><b>DAY 04 · 16 NOV</b><h3>Return journeys</h3><p>Groups A/B return via Anmod, Dharwad, Hubballi, Davanagere, Chitradurga and Tumakuru to Bangalore. Group C returns via Belagavi and Kolhapur to Pune.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="routes">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="eyebrow">Plan your stops</div><h2>Ride routes</h2></div>
+      <p>Verify navigation, fuel range, weather and road conditions before departure.</p>
+    </div>
+    <div class="routes">
+      <div class="route">
+        <div class="eyebrow">Bangalore · Groups A/B</div>
+        <h3>Bangalore → South Goa</h3>
+        <p>Route waypoints:</p>
+        <div class="stops">
+          <span class="stop">Bangalore</span><span class="stop">Tumakuru</span><span class="stop">Chitradurga</span><span class="stop">Davanagere</span><span class="stop">Hubballi</span><span class="stop">Dharwad</span><span class="stop">Yellapur</span><span class="stop">Anmod Ghat</span><span class="stop">Mollem</span><span class="stop">Margao</span><span class="stop">Regenta Baywatch Resort</span>
+        </div>
+        <p><b>Fuel stops:</b> Tumakuru, Davanagere, Hubballi, Mollem.</p>
+      </div>
+      <div class="route">
+        <div class="eyebrow">Pune · Group C</div>
+        <h3>Pune → South Goa</h3>
+        <p>Route waypoints:</p>
+        <div class="stops">
+          <span class="stop">Pune</span><span class="stop">Satara</span><span class="stop">Karad</span><span class="stop">Kolhapur</span><span class="stop">Nipani</span><span class="stop">Belagavi</span><span class="stop">Chorla Ghat</span><span class="stop">Sanquelim</span><span class="stop">Ponda</span><span class="stop">Margao</span><span class="stop">Regenta Baywatch Resort</span>
+        </div>
+        <p><b>Fuel stops:</b> Satara, Kolhapur, Belagavi, Ponda.</p>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <div class="eyebrow">Stay &amp; travel</div>
+      <h3>Regenta Baywatch Resort · South Goa</h3>
+      <p>Common stay nights are 14 and 15 November, with all groups checking out on 16 November. Confirm rooming, check-in instructions and accepted ID directly with your group lead.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wash" id="groups">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="eyebrow">Ride leadership</div><h2>Groups &amp; coordination</h2></div>
+      <p>Group origins and designated leads for Adventure Next Goa 2026.</p>
+    </div>
+    <div class="groups">
+      <div class="group">
+        <h3>Group A</h3>
+        <p>Lead: <b>Vibhav</b><br>Departure: 13 November · Bangalore &amp; Chennai riders.</p>
+      </div>
+      <div class="group">
+        <h3>Group B</h3>
+        <p>Lead: <b>Sriram Kamat</b><br>Departure: 14 November · Origin: Bangalore.</p>
+      </div>
+      <div class="group">
+        <h3>Group C</h3>
+        <p>Lead: <b>Kaustubh Thengodkar</b><br>Departure: 14 November · Origin: Pune.</p>
+      </div>
+    </div>
+    <div class="roles">
+      <div class="role"><small>Group A lead</small><b>Vibhav</b></div>
+      <div class="role"><small>Group B lead</small><b>Sriram Kamat</b></div>
+      <div class="role"><small>Group C lead</small><b>Kaustubh Thengodkar</b></div>
+      <div class="role"><small>Finance</small><b>Prashanth Gorur</b></div>
+      <div class="role"><small>Communications</small><b>Vinay Bhoopalam</b></div>
+    </div>
+  </div>
+</section>
+
+<section id="handbook">
+  <div class="wrap">
+    <div class="head">
+      <div><div class="eyebrow">Before you leave</div><h2>Pre-ride checklist</h2></div>
+      <p>Tick each item off before the departure briefing.</p>
+    </div>
+    <div class="checkgrid">
+      <div class="panel">
+        <h3>Motorcycle checks</h3>
+        <ul class="checklist">
+          <li>Engine oil and service</li><li>Chain condition and lubrication</li><li>Brake pads and fluid</li><li>Tyres and pressure</li><li>Battery condition</li><li>Lights and horn</li><li>Coolant</li><li>Clutch and throttle</li><li>Puncture kit and inflator</li><li>Phone mount and charger</li><li>Luggage straps</li><li>First-aid kit</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Rider &amp; luggage</h3>
+        <ul class="checklist">
+          <li>Helmet and gloves</li><li>Riding jacket and pants</li><li>Riding boots</li><li>Rain layer / rain gear</li><li>Driving licence</li><li>RC, insurance and PUC</li><li>Hydration</li><li>Power bank</li><li>Medicines and toiletries</li><li>Clothes for 3–5 days</li><li>Camera / intercom (optional)</li><li>Secure luggage</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span><b>ADVENTURE NEXT · GOA 2026</b> — 13–16 November 2026</span>
+    <span>Live Rider Tracking &amp; Route Handbook</span>
+  </div>
+</footer>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -87,8 +492,6 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzOxbaBptI8smgP-u5wsyfU6q4y9pOHyepohjbGLkGn2_EfQ5XCJylsamIPukj8SGJldA/exec";
-
 const firebaseConfig = {
   apiKey: "AIzaSyBA-sHDVIcqZA7BUsGvLGzz2-vxo_0m5zE",
   authDomain: "adventure-next-goa-2026.firebaseapp.com",
@@ -102,70 +505,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
-
-const jersey = document.getElementById('jersey');
-['colour', 'size', 'qty'].forEach(id => document.getElementById(id).disabled = true);
-jersey.addEventListener('change', () => {
-  ['colour', 'size', 'qty'].forEach(id => document.getElementById(id).disabled = !jersey.checked);
-});
-
-document.getElementById('registrationForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  const form = e.currentTarget;
-  if (!form.reportValidity()) return;
-
-  const msg = document.getElementById('msg');
-  const submitBtn = form.querySelector('.submit');
-  
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'SAVING REGISTRATION...';
-  msg.textContent = 'Submitting your details to the registry...';
-  msg.style.color = 'var(--muted)';
-
-  const formData = {
-    name: form.name.value,
-    licence: form.licence.value,
-    bloodGroup: form.bloodGroup.value,
-    bike: form.bike.value,
-    rc: form.rc.value,
-    food: form.food.value,
-    emergencyName: form.emergencyName.value,
-    emergencyPhone: form.emergencyPhone.value,
-    paymentUTR: form.paymentUTR.value,
-    extraJersey: jersey.checked,
-    jerseyColour: form.jerseyColour.value,
-    jerseySize: form.jerseySize.value,
-    jerseyQty: form.jerseyQty.value,
-    website_url: ''
-  };
-
-  try {
-    const response = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      body: JSON.stringify(formData)
-    });
-    const result = await response.json();
-
-    if (result.status === 'success') {
-      msg.style.color = '#0d8a4e';
-      msg.textContent = result.message;
-      form.reset();
-      ['colour', 'size', 'qty'].forEach(id => document.getElementById(id).disabled = true);
-    } else if (result.status === 'duplicate') {
-      msg.style.color = 'var(--red)';
-      msg.textContent = result.message;
-    } else {
-      msg.style.color = 'var(--red)';
-      msg.textContent = result.message || 'An error occurred. Please try again.';
-    }
-  } catch (err) {
-    msg.style.color = 'var(--red)';
-    msg.textContent = 'Connection error. Please check your internet connection and try again.';
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'SUBMIT REGISTRATION →';
-  }
-});
 
 // Leaflet Map Setup
 const map = L.map('map').setView([15.2993, 74.1240], 8);
@@ -209,7 +548,7 @@ db.ref('riders').on('value', snapshot => {
     const latLng = [rider.lat, rider.lng];
     const icon = createInitialsIcon(rider.name, rider.color);
     const timeStr = rider.updatedAt ? new Date(rider.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '';
-    const popupHtml = `<b>${escapeHtml(rider.name)} (${escapeHtml(rider.phone)})</b><br><small>Updated: ${timeStr}</small>`;
+    const popupHtml = `<b>${escapeHtml(rider.name)}</b><br><a href="tel:${escapeHtml(rider.phone)}" style="color:#1d6ce0;font-weight:700">${escapeHtml(rider.phone)}</a><br><small>Updated: ${timeStr}</small>`;
 
     if (markers[uid]) {
       markers[uid].setLatLng(latLng);
@@ -268,12 +607,12 @@ startShareBtn.addEventListener('click', async () => {
     }
 
     startShareBtn.style.display = 'none';
-    stopShareBtn.style.display = 'inline-block';
+    stopShareBtn.style.display = 'inline-flex';
     riderNameInput.disabled = true;
     riderPhoneInput.disabled = true;
     riderColorInput.disabled = true;
     shareStatus.style.color = '#0d8a4e';
-    shareStatus.textContent = `Sharing active as ${riderName} (${riderPhone}). Keep browser open while riding.`;
+    shareStatus.textContent = `Sharing active as ${riderName} (${riderPhone}). Keep screen active while riding.`;
 
     watchId = navigator.geolocation.watchPosition(
       position => {
@@ -303,7 +642,7 @@ startShareBtn.addEventListener('click', async () => {
 
   } catch (err) {
     alert('Failed to start location sharing: ' + err.message);
-    startShareBtn.style.display = 'inline-block';
+    startShareBtn.style.display = 'inline-flex';
     stopShareBtn.style.display = 'none';
     riderNameInput.disabled = false;
     riderPhoneInput.disabled = false;
@@ -323,7 +662,7 @@ stopShareBtn.addEventListener('click', () => {
     db.ref('riders/' + user.uid).remove();
   }
 
-  startShareBtn.style.display = 'inline-block';
+  startShareBtn.style.display = 'inline-flex';
   stopShareBtn.style.display = 'none';
   riderNameInput.disabled = false;
   riderPhoneInput.disabled = false;
@@ -331,4 +670,6 @@ stopShareBtn.addEventListener('click', () => {
   shareStatus.style.color = 'var(--muted)';
   shareStatus.textContent = 'Location sharing stopped.';
 });
-</script></body></html>
+</script>
+</body>
+</html>
