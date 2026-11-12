@@ -268,6 +268,20 @@ section{padding:60px 0;scroll-margin-top:78px}
   font-size:15px;
   min-height:46px;
 }
+.family-lookup{
+  background:var(--wash);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px;
+  margin-top:16px;
+}
+.family-lookup h4{
+  margin:0 0 6px;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
 .rider-badge{
   display:flex;
   align-items:center;
@@ -448,11 +462,11 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
         <div class="eyebrow">Live Ride Tracker</div>
         <h2>Live Rider Tracking <span class="live-badge" style="vertical-align:middle;margin-left:6px">● Real-Time</span></h2>
       </div>
-      <p>Enter your name, phone number, and badge colour to broadcast your live location on the map.</p>
+      <p>Riders can broadcast their live GPS location, and family members can search by phone number to follow a specific rider.</p>
     </div>
 
     <div class="panel tracker-highlight" style="margin-bottom:14px">
-      <h3>Rider Location Sharing</h3>
+      <h3>1. Rider Location Sharing</h3>
       <p>One active pin per phone number. Your session automatically resumes if you refresh the page.</p>
       <div class="track-controls">
         <input type="text" id="riderNameInput" placeholder="Your name (e.g. Rahul Sharma)" style="flex:1;min-width:180px">
@@ -469,6 +483,19 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
         <button class="btn" id="stopShareBtn" type="button" style="background:#444;display:none">STOP SHARING</button>
       </div>
       <p id="shareStatus" style="font-size:12px;margin-top:10px;font-weight:700;color:var(--muted)">Sharing is currently inactive.</p>
+
+      <!-- Family Member / Spectator Lookup Box -->
+      <div class="family-lookup">
+        <h4>2. Family &amp; Friends: Track a Rider by Phone Number</h4>
+        <p style="margin:0 0 8px;font-size:12px;color:#666">Enter a rider's mobile number to locate and follow them on the map.</p>
+        <div class="track-controls" style="margin-top:0">
+          <input type="tel" id="lookupPhoneInput" placeholder="Enter rider's phone number" inputmode="tel" style="flex:1;min-width:200px">
+          <button class="btn" id="lookupBtn" type="button" style="background:#191b1e">FIND &amp; FOLLOW RIDER</button>
+          <button class="btn" id="clearLookupBtn" type="button" style="background:white;color:var(--ink);border:1px solid #cfd3d8;display:none">SHOW ALL RIDERS</button>
+        </div>
+        <p id="lookupStatus" style="font-size:12px;margin:8px 0 0;font-weight:700;color:var(--muted)"></p>
+      </div>
+
       <div id="map"></div>
     </div>
   </div>
@@ -701,20 +728,68 @@ function escapeHtml(str) {
   return String(str || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
-// Normalize phone number to a unique key (last 10 digits) so only 1 marker exists per phone number
 function normalizePhoneKey(phone) {
   const digits = String(phone || '').replace(/\D/g, '');
   return digits.length >= 10 ? digits.slice(-10) : digits;
 }
 
 let markers = {};
+let latestRidersData = {};
 let watchId = null;
 let hasCenteredOnUser = false;
 let activePhoneKey = null;
+let followedPhoneKey = null; // Used by family members tracking a specific rider
+
+const lookupPhoneInput = document.getElementById('lookupPhoneInput');
+const lookupBtn = document.getElementById('lookupBtn');
+const clearLookupBtn = document.getElementById('clearLookupBtn');
+const lookupStatus = document.getElementById('lookupStatus');
+
+function focusOnFollowedRider(phoneKey, openPopup = false) {
+  const rider = latestRidersData[phoneKey];
+  if (rider && markers[phoneKey]) {
+    map.setView([rider.lat, rider.lng], 15);
+    if (openPopup) markers[phoneKey].openPopup();
+    const timeStr = rider.updatedAt ? new Date(rider.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '';
+    lookupStatus.style.color = '#0d8a4e';
+    lookupStatus.textContent = `Tracking ${rider.name} (${rider.phone}) — Last updated at ${timeStr}`;
+  } else {
+    lookupStatus.style.color = 'var(--red)';
+    lookupStatus.textContent = 'No active location found for this phone number right now. Make sure the rider has started sharing.';
+  }
+}
+
+lookupBtn.addEventListener('click', () => {
+  const key = normalizePhoneKey(lookupPhoneInput.value);
+  if (!key || key.length < 6) {
+    alert('Please enter a valid phone number to track.');
+    lookupPhoneInput.focus();
+    return;
+  }
+  followedPhoneKey = key;
+  clearLookupBtn.style.display = 'inline-flex';
+  focusOnFollowedRider(key, true);
+});
+
+clearLookupBtn.addEventListener('click', () => {
+  followedPhoneKey = null;
+  lookupPhoneInput.value = '';
+  lookupStatus.textContent = '';
+  clearLookupBtn.style.display = 'none';
+  
+  const keys = Object.keys(markers);
+  if (keys.length > 0) {
+    const group = new L.featureGroup(keys.map(k => markers[k]));
+    map.fitBounds(group.getBounds().pad(0.2));
+  } else {
+    map.setView([15.2993, 74.1240], 8);
+  }
+});
 
 // Listen to all active riders keyed by unique phone number
 db.ref('riders').on('value', snapshot => {
   const riders = snapshot.val() || {};
+  latestRidersData = riders;
   
   Object.keys(riders).forEach(phoneKey => {
     const rider = riders[phoneKey];
@@ -740,6 +815,11 @@ db.ref('riders').on('value', snapshot => {
       delete markers[phoneKey];
     }
   });
+
+  // If a family member is actively following a rider, keep the map updated on them
+  if (followedPhoneKey) {
+    focusOnFollowedRider(followedPhoneKey, false);
+  }
 });
 
 const startShareBtn = document.getElementById('startShareBtn');
@@ -777,7 +857,6 @@ async function beginTrackingSession(riderName, riderPhone, riderColor, isAutoRes
 
     activePhoneKey = phoneKey;
 
-    // Persist session locally so page refresh automatically resumes tracking
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       name: riderName,
       phone: riderPhone,
@@ -794,7 +873,6 @@ async function beginTrackingSession(riderName, riderPhone, riderColor, isAutoRes
     shareStatus.textContent = `Sharing active as ${riderName} (${riderPhone}). Keep screen active while riding.`;
 
     const riderRef = db.ref('riders/' + phoneKey);
-    // Automatically remove marker if browser tab is completely closed/disconnected
     riderRef.onDisconnect().remove();
 
     if (watchId !== null) {
@@ -806,7 +884,7 @@ async function beginTrackingSession(riderName, riderPhone, riderColor, isAutoRes
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
-        if (!hasCenteredOnUser) {
+        if (!hasCenteredOnUser && !followedPhoneKey) {
           map.setView([lat, lng], 14);
           hasCenteredOnUser = true;
         }
@@ -860,7 +938,6 @@ stopShareBtn.addEventListener('click', () => {
     watchId = null;
   }
 
-  // Clear saved session so it does not auto-resume on next refresh
   localStorage.removeItem(STORAGE_KEY);
 
   const keyToRemove = activePhoneKey || normalizePhoneKey(riderPhoneInput.value);
@@ -879,8 +956,20 @@ stopShareBtn.addEventListener('click', () => {
   shareStatus.textContent = 'Location sharing stopped.';
 });
 
-// Auto-restore tracking session on page load/refresh if rider hadn't clicked STOP SHARING
 window.addEventListener('DOMContentLoaded', () => {
+  // Support direct shareable family link via ?track=9876543210
+  const params = new URLSearchParams(window.location.search);
+  const trackParam = params.get('track');
+  if (trackParam) {
+    const key = normalizePhoneKey(trackParam);
+    if (key) {
+      lookupPhoneInput.value = trackParam;
+      followedPhoneKey = key;
+      clearLookupBtn.style.display = 'inline-flex';
+      document.getElementById('tracking').scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
     if (saved && saved.active && saved.name && saved.phone) {
