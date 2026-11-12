@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Adventure Next | Goa 2026</title>
-<!-- Leaflet CSS for OpenStreetMap -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
-:root{--red:#d7192d;--ink:#17191c;--muted:#686d73;--line:#e3e5e8;--wash:#f7f7f6}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 36px));margin:auto}header{position:sticky;top:0;z-index:5;background:#ffffffed;backdrop-filter:blur(12px);border-bottom:1px solid #eee}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}.logo{color:var(--red);font-weight:900;letter-spacing:.08em}.links{display:flex;gap:22px;font-size:13px}.links a:hover{color:var(--red)}.btn{background:var(--red);color:white;border:0;border-radius:7px;padding:12px 16px;font-size:12px;font-weight:800;cursor:pointer}.hero{position:relative;overflow:hidden;background:linear-gradient(105deg,#fbfbfa,#f2f2f0 52%,white)}.topo{position:absolute;inset:0;opacity:.42;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cg fill='none' stroke='%23d5d8da'%3E%3Cpath d='M-20 35C80 0 90 100 180 80S310 5 450 55M-20 70C80 35 105 130 195 110S330 45 450 95M-20 110C90 70 120 165 215 145S350 85 450 130M-20 155C100 110 140 200 240 180S370 130 450 170M-20 205C100 160 160 245 270 225S390 180 450 215M-20 260C110 215 180 300 300 275S410 235 450 265M-20 320C120 270 205 355 330 330S425 290 450 320M-20 380C130 330 230 410 365 385S440 355 450 380'/%3E%3C/g%3E%3C/svg%3E");background-size:500px}.bike{position:absolute;left:-3%;bottom:-1%;width:57%;height:78%;opacity:.47;pointer-events:none;z-index:0;overflow:hidden}.bike img{width:100%;height:100%;object-fit:contain;object-position:left bottom;filter:grayscale(1);mix-blend-mode:multiply}.hero-inner{position:relative;display:grid;grid-template-columns:.9fr 1.1fr;gap:30px;align-items:center;padding:42px 0;z-index:1}.kicker,.eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);font-weight:800}.hero h1{font-size:clamp(55px,7vw,88px);line-height:.95;letter-spacing:-.06em;margin:12px 0}.hero h1 span{color:var(--red)}.tagline{font-size:11px;letter-spacing:.26em;color:#666}.pills{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}.pill{border:1px solid #ddd;border-radius:99px;padding:8px 11px;font-size:11px;background:#ffffffa8;color:#555}.form-card{position:relative;z-index:2;background:#ffffffdf;backdrop-filter:blur(10px);border:1px solid white;box-shadow:0 15px 45px #16191c12;border-radius:16px;padding:23px}.form-card h2{margin:0;font-size:23px}.sub{font-size:13px;color:var(--muted);margin:5px 0 18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:700}.full{grid-column:1/-1}.field input,.field select{width:100%;min-height:37px;padding:9px 10px;border:1px solid #d7dade;border-radius:6px;background:#ffffffd9;font:inherit;font-weight:400}.field input[type=file]{font-size:11px}.note{font-size:10px;color:#777;line-height:1.45;font-weight:400}.jersey{display:grid;grid-template-columns:1fr 80px;gap:10px;align-items:end;margin-top:14px}.check{display:flex;align-items:center;gap:7px;color:#666;font-size:11px;margin:8px 0}.check input{accent-color:var(--red)}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.shirt{height:92px;border-radius:15px 15px 5px 5px;background:#191b1e;color:white;display:grid;place-items:center;text-align:center;font-size:8px;font-weight:900;position:relative;overflow:hidden}.shirt:after{content:"";position:absolute;width:100px;height:14px;background:var(--red);transform:rotate(-28deg)}.shirt span{z-index:1}.submit{width:100%;margin-top:13px}.privacy{font-size:10px;color:#777;line-height:1.5;margin-top:10px}.message{font-size:12px;font-weight:700;margin-top:10px;line-height:1.5}section{padding:65px 0;scroll-margin-top:78px}.head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:22px}.head h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.04em;margin:6px 0}.head p{max-width:520px;color:#666;font-size:13px;line-height:1.7;margin:0}.stats,.timeline,.groups,.roles,.checkgrid{display:grid;gap:12px}.stats{grid-template-columns:repeat(4,1fr)}.stat,.panel,.group{border:1px solid var(--line);border-radius:12px;padding:18px;background:white}.stat strong{display:block;font-size:30px}.stat span{font-size:11px;color:#666}.timeline{grid-template-columns:repeat(4,1fr)}.day{border-top:3px solid var(--red);background:var(--wash);padding:17px;border-radius:0 0 10px 10px}.day b{font-size:10px;color:var(--red);letter-spacing:.12em}.day h3{font-size:16px;margin:10px 0}.day p,.panel p,.group p{font-size:12px;line-height:1.7;color:#666}.routes{display:grid;grid-template-columns:1fr 1fr;gap:14px}.route{background:#191b1e;color:white;border-radius:12px;padding:20px}.route h3{margin:8px 0}.route .eyebrow{color:#ff8995}.route p{color:#ddd;font-size:12px;line-height:1.7}.stops{display:flex;flex-wrap:wrap;gap:6px}.stop{font-size:10px;border:1px solid #4b4e52;padding:6px 7px;border-radius:5px}.groups{grid-template-columns:repeat(3,1fr)}.group h3{margin:0}.group strong{font-size:11px;color:var(--red)}.roles{grid-template-columns:repeat(5,1fr);margin-top:13px}.role{background:var(--wash);padding:12px;border-radius:8px}.role small{display:block;color:#777;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}.role b{font-size:12px}.checkgrid{grid-template-columns:1fr 1fr}.checklist{padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px}.checklist li{font-size:12px;color:#555}.checklist li:before{content:"✓";color:var(--red);font-weight:900;margin-right:8px}.notice{background:#fff7f7;border:1px solid #f0d0d4;border-radius:10px;padding:14px;color:#62494d;font-size:12px;line-height:1.65;margin-top:14px}footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.wash{background:#fafafa}
-#map{width:100%;height:450px;border-radius:12px;border:1px solid var(--line);margin-top:14px}
+:root{--red:#d7192d;--ink:#17191c;--muted:#686d73;--line:#e3e5e8;--wash:#f7f7f6}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:85px}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 36px));margin:auto}header{position:sticky;top:0;z-index:1000;background:#ffffffed;backdrop-filter:blur(12px);border-bottom:1px solid #eee}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}.logo{color:var(--red);font-weight:900;letter-spacing:.08em}.links{display:flex;gap:22px;font-size:13px}.links a:hover{color:var(--red)}.btn{background:var(--red);color:white;border:0;border-radius:7px;padding:12px 16px;font-size:12px;font-weight:800;cursor:pointer}.hero{position:relative;overflow:hidden;background:linear-gradient(105deg,#fbfbfa,#f2f2f0 52%,white)}.topo{position:absolute;inset:0;opacity:.42;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420'%3E%3Cg fill='none' stroke='%23d5d8da'%3E%3Cpath d='M-20 35C80 0 90 100 180 80S310 5 450 55M-20 70C80 35 105 130 195 110S330 45 450 95M-20 110C90 70 120 165 215 145S350 85 450 130M-20 155C100 110 140 200 240 180S370 130 450 170M-20 205C100 160 160 245 270 225S390 180 450 215M-20 260C110 215 180 300 300 275S410 235 450 265M-20 320C120 270 205 355 330 330S425 290 450 320M-20 380C130 330 230 410 365 385S440 355 450 380'/%3E%3C/g%3E%3C/svg%3E");background-size:500px}.bike{position:absolute;left:-3%;bottom:-1%;width:57%;height:78%;opacity:.47;pointer-events:none;z-index:0;overflow:hidden}.bike img{width:100%;height:100%;object-fit:contain;object-position:left bottom;filter:grayscale(1);mix-blend-mode:multiply}.hero-inner{position:relative;display:grid;grid-template-columns:.9fr 1.1fr;gap:30px;align-items:center;padding:42px 0;z-index:1}.kicker,.eyebrow{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);font-weight:800}.hero h1{font-size:clamp(55px,7vw,88px);line-height:.95;letter-spacing:-.06em;margin:12px 0}.hero h1 span{color:var(--red)}.tagline{font-size:11px;letter-spacing:.26em;color:#666}.pills{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}.pill{border:1px solid #ddd;border-radius:99px;padding:8px 11px;font-size:11px;background:#ffffffa8;color:#555}.form-card{position:relative;z-index:2;background:#ffffffdf;backdrop-filter:blur(10px);border:1px solid white;box-shadow:0 15px 45px #16191c12;border-radius:16px;padding:23px}.form-card h2{margin:0;font-size:23px}.sub{font-size:13px;color:var(--muted);margin:5px 0 18px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:700}.full{grid-column:1/-1}.field input,.field select{width:100%;min-height:37px;padding:9px 10px;border:1px solid #d7dade;border-radius:6px;background:#ffffffd9;font:inherit;font-weight:400}.field input[type=file]{font-size:11px}.note{font-size:10px;color:#777;line-height:1.45;font-weight:400}.jersey{display:grid;grid-template-columns:1fr 80px;gap:10px;align-items:end;margin-top:14px}.check{display:flex;align-items:center;gap:7px;color:#666;font-size:11px;margin:8px 0}.check input{accent-color:var(--red)}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.shirt{height:92px;border-radius:15px 15px 5px 5px;background:#191b1e;color:white;display:grid;place-items:center;text-align:center;font-size:8px;font-weight:900;position:relative;overflow:hidden}.shirt:after{content:"";position:absolute;width:100px;height:14px;background:var(--red);transform:rotate(-28deg)}.shirt span{z-index:1}.submit{width:100%;margin-top:13px}.privacy{font-size:10px;color:#777;line-height:1.5;margin-top:10px}.message{font-size:12px;font-weight:700;margin-top:10px;line-height:1.5}section{padding:65px 0;scroll-margin-top:78px}.head{display:flex;justify-content:space-between;gap:25px;align-items:end;margin-bottom:22px}.head h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.04em;margin:6px 0}.head p{max-width:520px;color:#666;font-size:13px;line-height:1.7;margin:0}.stats,.timeline,.groups,.roles,.checkgrid{display:grid;gap:12px}.stats{grid-template-columns:repeat(4,1fr)}.stat,.panel,.group{border:1px solid var(--line);border-radius:12px;padding:18px;background:white}.stat strong{display:block;font-size:30px}.stat span{font-size:11px;color:#666}.timeline{grid-template-columns:repeat(4,1fr)}.day{border-top:3px solid var(--red);background:var(--wash);padding:17px;border-radius:0 0 10px 10px}.day b{font-size:10px;color:var(--red);letter-spacing:.12em}.day h3{font-size:16px;margin:10px 0}.day p,.panel p,.group p{font-size:12px;line-height:1.7;color:#666}.routes{display:grid;grid-template-columns:1fr 1fr;gap:14px}.route{background:#191b1e;color:white;border-radius:12px;padding:20px}.route h3{margin:8px 0}.route .eyebrow{color:#ff8995}.route p{color:#ddd;font-size:12px;line-height:1.7}.stops{display:flex;flex-wrap:wrap;gap:6px}.stop{font-size:10px;border:1px solid #4b4e52;padding:6px 7px;border-radius:5px}.groups{grid-template-columns:repeat(3,1fr)}.group h3{margin:0}.group strong{font-size:11px;color:var(--red)}.roles{grid-template-columns:repeat(5,1fr);margin-top:13px}.role{background:var(--wash);padding:12px;border-radius:8px}.role small{display:block;color:#777;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}.role b{font-size:12px}.checkgrid{grid-template-columns:1fr 1fr}.checklist{padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px}.checklist li{font-size:12px;color:#555}.checklist li:before{content:"✓";color:var(--red);font-weight:900;margin-right:8px}.notice{background:#fff7f7;border:1px solid #f0d0d4;border-radius:10px;padding:14px;color:#62494d;font-size:12px;line-height:1.65;margin-top:14px}footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}.foot{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}.wash{background:#fafafa}
+#map{width:100%;height:450px;border-radius:12px;border:1px solid var(--line);margin-top:14px;z-index:1}
+.track-controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.track-controls input,.track-controls select{padding:10px 12px;border:1px solid #d7dade;border-radius:6px;font:inherit;font-size:13px;min-height:40px}
+.rider-badge{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;color:#fff;font-weight:900;font-size:12px;border:2.5px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.4);letter-spacing:.02em}
 @media(max-width:900px){.hero-inner{grid-template-columns:1fr}.bike{width:100%;left:-25%;opacity:.22}.timeline{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.roles{grid-template-columns:repeat(2,1fr)}.head{display:block}.head p{margin-top:8px}}@media(max-width:600px){.nav{height:auto;padding:13px 0;flex-wrap:wrap}.links{order:3;width:100%;overflow:auto;padding:5px 0;gap:16px}.links a{white-space:nowrap}.hero-inner{padding:30px 0}.fields,.routes,.checkgrid{grid-template-columns:1fr}.full{grid-column:auto}.timeline,.groups{grid-template-columns:1fr}.checklist{grid-template-columns:1fr}.form-card{padding:17px}.hero h1{font-size:58px}}
 </style></head><body>
 <header><div class="wrap nav"><a class="logo" href="#home">◢ ADVENTURE NEXT <span style="color:#555;font-weight:600">/ GOA 2026</span></a><nav class="links"><a href="#home">Home</a><a href="#register">Register</a><a href="#itinerary">Itinerary</a><a href="#routes">Routes</a><a href="#tracking">Live Map</a></nav><a class="btn" href="#register">REGISTER NOW ↗</a></div></header>
@@ -24,14 +26,7 @@
 <label class="field">Emergency Contact Number <i style="color:var(--red)">*</i><input name="emergencyPhone" type="tel" required placeholder="Phone number"></label>
 <label class="field full">
   Payment UTR / Transaction Reference Number
-  <input
-    type="text"
-    id="paymentUTR"
-    name="paymentUTR"
-    placeholder="Enter your payment UTR number"
-    autocomplete="off"
-    maxlength="50"
-  >
+  <input type="text" id="paymentUTR" name="paymentUTR" placeholder="Enter your payment UTR number" autocomplete="off" maxlength="50">
   <span class="note">Enter the UTR or transaction reference number from your payment confirmation.</span>
 </label>
 <label class="field full">ID Proof for hotel (optional)<input name="idproof" type="file" accept=".pdf,.jpg,.jpeg,.png"><span class="note">PDF, JPG or PNG. Note: ID files are stored locally for confirmation only.</span></label></div>
@@ -58,36 +53,42 @@
 <section id="handbook"><div class="wrap"><div class="head"><div><div class="eyebrow">Before you leave</div><h2>Pre-ride checklist</h2></div><p>Combined from the two supplied documents. Tick each item off before the departure briefing.</p></div><div class="checkgrid">
 <div class="panel"><h3>Motorcycle checks</h3><ul class="checklist"><li>Engine oil and service</li><li>Chain condition and lubrication</li><li>Brake pads and fluid</li><li>Tyres and pressure</li><li>Battery condition</li><li>Lights and horn</li><li>Coolant</li><li>Clutch and throttle</li><li>Puncture kit and inflator</li><li>Phone mount and charger</li><li>Luggage straps</li><li>First-aid kit</li></ul></div>
 <div class="panel"><h3>Rider &amp; luggage</h3><ul class="checklist"><li>Helmet and gloves</li><li>Riding jacket and pants</li><li>Riding boots</li><li>Rain layer / rain gear</li><li>Driving licence</li><li>RC, insurance and PUC</li><li>Hydration</li><li>Power bank</li><li>Medicines and toiletries</li><li>Clothes for 3–5 days</li><li>Camera / intercom (optional)</li><li>Secure luggage</li></ul></div></div></div></section>
-<section class="wash" id="tracking"><div class="wrap"><div class="head"><div><div class="eyebrow">Organiser Dashboard</div><h2>Live Rider Tracking</h2></div><p>Voluntary live location sharing for participating riders during the ride.</p></div>
+<section class="wash" id="tracking"><div class="wrap"><div class="head"><div><div class="eyebrow">Live Ride Tracker</div><h2>Live Rider Tracking</h2></div><p>Pick your 3-digit rider number and pin colour to broadcast your location on the map.</p></div>
 <div class="panel" style="margin-bottom:14px">
   <h3>Rider Location Sharing</h3>
-  <p>Participating riders can securely broadcast their live GPS location during the ride. Location sharing is strictly voluntary and can be stopped at any time.</p>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
-    <input type="text" id="riderNameInput" placeholder="Enter your rider name" style="padding:9px;border:1px solid #d7dade;border-radius:6px;flex:1;min-width:200px">
+  <p>Enter your name, choose a 3-digit tracking number, and pick your map pin colour. Location sharing is strictly voluntary and can be stopped anytime.</p>
+  <div class="track-controls">
+    <input type="text" id="riderNameInput" placeholder="Your name" style="flex:1;min-width:160px">
+    <input type="text" id="riderNumberInput" placeholder="3-digit # (e.g. 007)" maxlength="3" inputmode="numeric" style="width:155px">
+    <select id="riderColorInput" aria-label="Pin colour">
+      <option value="#d7192d">Red Pin</option>
+      <option value="#17191c">Black Pin</option>
+      <option value="#1d6ce0">Blue Pin</option>
+      <option value="#0d8a4e">Green Pin</option>
+      <option value="#e67e22">Orange Pin</option>
+      <option value="#7c3aed">Purple Pin</option>
+    </select>
     <button class="btn" id="startShareBtn" type="button">START SHARING LOCATION</button>
     <button class="btn" id="stopShareBtn" type="button" style="background:#555;display:none">STOP SHARING</button>
   </div>
   <p id="shareStatus" style="font-size:12px;margin-top:8px;font-weight:700;color:var(--muted)">Sharing is currently inactive.</p>
 </div>
 <div class="panel">
-  <h3>Live Organiser Map (OpenStreetMap)</h3>
-  <p>Active riders sharing their location appear below in real time.</p>
+  <h3>Live Map (OpenStreetMap)</h3>
+  <p>Active riders appear below as colour-coded numbered badges. Tap any badge to see the rider's name and last update time.</p>
   <div id="map"></div>
 </div>
 </div></section>
 </main><footer><div class="wrap foot"><span><b>ADVENTURE NEXT · GOA 2026</b> — 13–16 November 2026</span><span>Based on the two supplied ride handbooks. Verify details with organisers before travel.</span></div></footer>
 
-<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<!-- Leaflet JS for OpenStreetMap -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzOxbaBptI8smgP-u5wsyfU6q4y9pOHyepohjbGLkGn2_EfQ5XCJylsamIPukj8SGJldA/exec";
 
-// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBA-sHDVIcqZA7BUsGvLGzz2-vxo_0m5zE",
   authDomain: "adventure-next-goa-2026.firebaseapp.com",
@@ -102,7 +103,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-// Jersey toggle & Form submission
 const jersey = document.getElementById('jersey');
 ['colour', 'size', 'qty'].forEach(id => document.getElementById(id).disabled = true);
 jersey.addEventListener('change', () => {
@@ -167,35 +167,52 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
   }
 });
 
-// Initialize Leaflet Map (OpenStreetMap)
-let map = L.map('map').setView([15.2993, 74.1240], 8); // Centered on Goa region
-
+// Leaflet Map Setup
+const map = L.map('map').setView([15.2993, 74.1240], 8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
+
+function createNumberedIcon(num, color) {
+  const safeNum = String(num || '---').replace(/[^0-9A-Za-z]/g, '').slice(0, 3);
+  const safeColor = /^#[0-9a-fA-F]{6}$/.test(color) ? color : '#d7192d';
+  return L.divIcon({
+    className: '',
+    html: `<div class="rider-badge" style="background:${safeColor}">${safeNum}</div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+    popupAnchor: [0, -18]
+  });
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
 
 let markers = {};
 let watchId = null;
+let hasCenteredOnUser = false; // Ensures map only auto-centers once when location is first acquired
 
-// Listen to Firebase Realtime Database for all active rider locations
 db.ref('riders').on('value', snapshot => {
   const riders = snapshot.val() || {};
   
   Object.keys(riders).forEach(uid => {
     const rider = riders[uid];
     const latLng = [rider.lat, rider.lng];
+    const icon = createNumberedIcon(rider.number, rider.color);
+    const timeStr = rider.updatedAt ? new Date(rider.updatedAt).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '';
+    const popupHtml = `<b>#${escapeHtml(rider.number)} · ${escapeHtml(rider.name)}</b><br><small>Updated: ${timeStr}</small>`;
 
     if (markers[uid]) {
       markers[uid].setLatLng(latLng);
-      markers[uid].bindPopup(`<b>${rider.name}</b>`);
+      markers[uid].setIcon(icon);
+      markers[uid].setPopupContent(popupHtml);
     } else {
-      markers[uid] = L.marker(latLng).addTo(map)
-        .bindPopup(`<b>${rider.name}</b>`);
+      markers[uid] = L.marker(latLng, { icon: icon }).addTo(map).bindPopup(popupHtml);
     }
   });
 
-  // Remove markers for riders who stopped sharing
   Object.keys(markers).forEach(uid => {
     if (!riders[uid]) {
       map.removeLayer(markers[uid]);
@@ -208,12 +225,23 @@ const startShareBtn = document.getElementById('startShareBtn');
 const stopShareBtn = document.getElementById('stopShareBtn');
 const shareStatus = document.getElementById('shareStatus');
 const riderNameInput = document.getElementById('riderNameInput');
+const riderNumberInput = document.getElementById('riderNumberInput');
+const riderColorInput = document.getElementById('riderColorInput');
 
 startShareBtn.addEventListener('click', async () => {
   const riderName = riderNameInput.value.trim();
+  const riderNumber = riderNumberInput.value.trim();
+  const riderColor = riderColorInput.value;
+
   if (!riderName) {
-    alert('Please enter your rider name before sharing location.');
+    alert('Please enter your name before sharing location.');
     riderNameInput.focus();
+    return;
+  }
+
+  if (!/^[0-9]{3}$/.test(riderNumber)) {
+    alert('Please enter a 3-digit tracking number (for example: 007 or 124).');
+    riderNumberInput.focus();
     return;
   }
 
@@ -223,6 +251,7 @@ startShareBtn.addEventListener('click', async () => {
   }
 
   shareStatus.textContent = 'Authenticating and starting location broadcast...';
+  hasCenteredOnUser = false; // Reset so map centers to rider's initial fix
 
   try {
     let user = auth.currentUser;
@@ -234,23 +263,32 @@ startShareBtn.addEventListener('click', async () => {
     startShareBtn.style.display = 'none';
     stopShareBtn.style.display = 'inline-block';
     riderNameInput.disabled = true;
+    riderNumberInput.disabled = true;
+    riderColorInput.disabled = true;
     shareStatus.style.color = '#0d8a4e';
-    shareStatus.textContent = 'Live location sharing active. Keep browser open while riding.';
+    shareStatus.textContent = `Sharing active as #${riderNumber} (${riderName}). Keep browser open while riding.`;
 
     watchId = navigator.geolocation.watchPosition(
       position => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
+        // Auto-center map on the rider's location the moment it is first received
+        if (!hasCenteredOnUser) {
+          map.setView([lat, lng], 14); // Zoom in closer on the rider
+          hasCenteredOnUser = true;
+        }
+
         db.ref('riders/' + user.uid).set({
           name: riderName,
+          number: riderNumber,
+          color: riderColor,
           lat: lat,
           lng: lng,
           updatedAt: Date.now()
         });
       },
       error => {
-        console.error(error);
         shareStatus.style.color = 'var(--red)';
         shareStatus.textContent = 'Error obtaining location: ' + error.message;
       },
@@ -258,11 +296,12 @@ startShareBtn.addEventListener('click', async () => {
     );
 
   } catch (err) {
-    console.error(err);
     alert('Failed to start location sharing: ' + err.message);
     startShareBtn.style.display = 'inline-block';
     stopShareBtn.style.display = 'none';
     riderNameInput.disabled = false;
+    riderNumberInput.disabled = false;
+    riderColorInput.disabled = false;
     shareStatus.textContent = 'Sharing failed.';
   }
 });
@@ -281,6 +320,8 @@ stopShareBtn.addEventListener('click', () => {
   startShareBtn.style.display = 'inline-block';
   stopShareBtn.style.display = 'none';
   riderNameInput.disabled = false;
+  riderNumberInput.disabled = false;
+  riderColorInput.disabled = false;
   shareStatus.style.color = 'var(--muted)';
   shareStatus.textContent = 'Location sharing stopped.';
 });
