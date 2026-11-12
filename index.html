@@ -454,6 +454,7 @@ footer{border-top:1px solid #eee;padding:24px 0;color:#777;font-size:11px}
                 </select>
               </label>
             </div>
+            <span class="note" style="display:block;margin-top:6px;">Extra Jersey Purchase depends on material availability with the vendor and might incur additional courier charges.</span>
           </div>
           <div class="shirt"><span>ADVENTURE<br>NEXT<br>GOA 2026</span></div>
         </div>
@@ -658,7 +659,7 @@ function switchTab(tabId, btnElement) {
   document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
   document.getElementById(tabId).classList.add('active');
   btnElement.classList.add('active');
-  setTimeout(() => { map.invalidateSize(); }, 200); // Fixes leaflet map rendering when tab opens
+  setTimeout(() => { map.invalidateSize(); }, 200);
 }
 
 // Jersey toggle & Registration Form
@@ -988,7 +989,6 @@ window.addEventListener('DOMContentLoaded', () => {
   if (trackParam) {
     const key = normalizePhoneKey(trackParam);
     if (key) {
-      // Automatically switch to the "Track Rider" tab if opened via query parameter
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
       document.getElementById('trackTab').classList.add('active');
